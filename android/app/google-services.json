@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "747461912807",
+    "firebase_url": "https://peppex-delivery-service.firebaseio.com",
+    "project_id": "peppex-delivery-service",
+    "storage_bucket": "peppex-delivery-service.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:747461912807:android:327ac8cc3b237cd648da42",
+        "android_client_info": {
+          "package_name": "com.example.peppex_delivery"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "747461912807-thq80vqs5l0bou2804ra9t9bbr9qcluv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.peppex_delivery",
+            "certificate_hash": "858dfdd94d0a630984467a5619624f4ef1de2856"
+          }
+        },
+        {
+          "client_id": "747461912807-3otfjr2738repgbcctg7ae2ljpc2cqlr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDII0BrwJ71_bsxqZGHpKQSIMiLZwdGbuM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "747461912807-3otfjr2738repgbcctg7ae2ljpc2cqlr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

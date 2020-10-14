@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:peppex_delivery/constants/app_theme.dart';
+import 'package:peppex_delivery/ui/screens/login.dart';
 
 //import 'package:peppex_delivery/ui/screens/home.dart';
 //import 'package:peppex_delivery/ui/screens/login.dart';
@@ -12,6 +13,6 @@ void main() {
     title: 'Peppex Delivery',
     theme: appTheme(),
     debugShowCheckedModeBanner: false,
-    home: Register(),
+    home: Login(),
   ));
 }

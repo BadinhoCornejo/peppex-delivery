@@ -11,6 +11,15 @@ const OverlineSize = 10.0;
 
 const String FontNameDefault = 'Roboto';
 
+const _borderInput = OutlineInputBorder(
+          borderRadius: BorderRadius.zero,
+          borderSide: BorderSide(
+            color: Color.fromRGBO(1, 244, 244, 244), 
+            width: 1,
+            style: BorderStyle.solid
+          )
+        );
+
 ThemeData appTheme() => ThemeData(
       brightness: Brightness.light,
       primaryColor: PrimaryColor,
@@ -26,7 +35,38 @@ ThemeData appTheme() => ThemeData(
         button: primaryButtonTextStyle(),
         caption: captionStyle(),
         overline: overlineStyle(),
+        // sebas xd
+        subtitle2: loginNormalStyle(),
+        bodyText2: loginSecondaryStyle(),
+        headline3: frontText()
       ),
+      inputDecorationTheme: InputDecorationTheme(
+        border: _borderInput,
+        fillColor: Colors.white,
+        filled: true,
+        hintStyle: TextStyle(
+            fontFamily: FontNameDefault,
+            fontWeight: FontWeight.normal,
+            fontSize: 14.0,
+            color: Color.fromRGBO(0, 0, 0, 5.4),
+            letterSpacing: 0.4,
+        )
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all<Color>(PrimaryColor),
+          padding: MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.only(top: 20, bottom: 20)),
+          textStyle: MaterialStateProperty.all<TextStyle>(
+            TextStyle(
+              fontFamily: FontNameDefault,
+              fontWeight: FontWeight.normal,
+              fontSize: 14,
+              letterSpacing: 0.4,
+              color: Colors.black
+            ),
+          ),
+        )
+      )
     );
 
 AppBarTheme appBarTheme() => AppBarTheme(
@@ -75,3 +115,29 @@ TextStyle overlineStyle() => TextStyle(
       color: Colors.black,
       letterSpacing: 1.5,
     );
+
+// sebas xd
+
+TextStyle loginNormalStyle() => TextStyle(
+  fontFamily: FontNameDefault,
+  fontWeight: FontWeight.w500,
+  fontSize: Body2Size,
+  color: Colors.white,
+  letterSpacing: 0.15,
+);
+
+TextStyle loginSecondaryStyle() => TextStyle(
+  fontFamily: FontNameDefault,
+  fontWeight: FontWeight.w500,
+  fontSize: Body2Size,
+  color: PrimaryColor,
+  letterSpacing: 0.15,
+);
+
+TextStyle frontText() => TextStyle(
+  fontFamily: FontNameDefault,
+  fontWeight: FontWeight.w400,
+  fontSize: Headline6Size,
+  color: Colors.white,
+  letterSpacing: 0.15
+);

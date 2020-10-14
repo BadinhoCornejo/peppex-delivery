@@ -1,17 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:peppex_delivery/helpers/helpers.dart';
 
 import '../../constants/peppex_icons.dart';
 
-class InputField extends StatefulWidget{
-
+class InputField extends StatefulWidget {
   final BuildContext context;
   final String textHint;
   final IconData iconData;
   final bool isPassword;
   final bool hasRadius;
+  final TextEditingController controller;
+  final Function(String) validator;
+  final Function(String) onChanged;
+  final Function(String) onSaved;
 
-    InputField(
+  InputField(
       {Key key,
+      @required this.validator,
+      @required this.onChanged,
+      @required this.onSaved,
+      @required this.controller,
       @required this.context,
       @required this.textHint,
       @required this.iconData,
@@ -21,11 +29,9 @@ class InputField extends StatefulWidget{
 
   @override
   _InputFieldState createState() => _InputFieldState();
-
 }
 
 class _InputFieldState extends State<InputField> {
-
   bool _obscureText;
 
   @override
@@ -41,18 +47,42 @@ class _InputFieldState extends State<InputField> {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
+      controller: widget.controller,
+      validator: widget.validator,
+      onChanged: widget.onChanged,
+      onSaved: widget.onSaved,
       style: Theme.of(context).textTheme.bodyText1,
       decoration: InputDecoration(
         prefixIcon: Icon(widget.iconData, size: 20),
         hintText: widget.textHint,
         border: OutlineInputBorder(
-          borderRadius: widget.hasRadius ? BorderRadius.circular(8) : BorderRadius.zero
+          borderRadius:
+              widget.hasRadius ? BorderRadius.circular(8) : BorderRadius.zero,
+          borderSide: new BorderSide(
+            color: Colors.grey,
+          ),
         ),
-        suffixIcon: widget.isPassword ? IconButton(
-            icon: _obscureText ? Icon(Peppex.dashicons_visibility) : Icon(Peppex.dashicons_hidden_1), 
-            onPressed: () { _toggle(); },
-          ) : null
+        enabledBorder: OutlineInputBorder(
+          borderSide: new BorderSide(
+            color: Colors.grey,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: new BorderSide(
+            color: Colors.grey,
+          ),
+        ),
+        suffixIcon: widget.isPassword
+            ? IconButton(
+                icon: _obscureText
+                    ? Icon(Peppex.dashicons_visibility)
+                    : Icon(Peppex.dashicons_hidden_1),
+                onPressed: () {
+                  _toggle();
+                },
+              )
+            : null,
       ),
       obscureText: _obscureText,
     );

@@ -1,13 +1,13 @@
-class User {
+class UserModel {
   String uid;
   String email;
   String displayName;
   String photoUrl;
 
-  User({this.uid, this.email, this.displayName, this.photoUrl});
+  UserModel({this.uid, this.email, this.displayName, this.photoUrl});
 
-  factory User.fromMap(Map data) {
-    return User(
+  factory UserModel.fromMap(Map data) {
+    return UserModel(
       uid: data['uid'],
       email: data['email'] ?? '',
       displayName: data['displayName'] ?? '',

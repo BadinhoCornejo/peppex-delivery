@@ -44,102 +44,97 @@ class Register extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    height: 500,
+                    height: MediaQuery.of(context).size.height * 0.6,
                     child: Padding(
-                        padding: const EdgeInsets.fromLTRB(53, 15, 53, 13),
-                        child: Stack(
-                          children: [
-                            Positioned.fill(
-                              top: 55.0,
-                              child: Form(
-                                key: _formKey,
-                                child: Container(
-                                  child: Column(
-                                    children: [
-                                      SizedBox(height: 80),
-                                      InputField(
-                                        context: context,
-                                        textHint: 'Nombres y apellidos',
-                                        iconData: Peppex.bytesize_user,
-                                        isPassword: false,
-                                        hasRadius: false,
-                                        controller:
-                                            authController.nameController,
-                                        validator: Validator().name,
-                                        onChanged: (value) => null,
-                                        onSaved: (value) => authController
-                                            .nameController.text = value,
-                                      ),
-                                      InputField(
-                                        context: context,
-                                        textHint: 'Correo electrónico',
-                                        iconData: Peppex.carbon_email,
-                                        isPassword: false,
-                                        hasRadius: false,
-                                        controller:
-                                            authController.emailController,
-                                        validator: Validator().email,
-                                        onChanged: (value) => null,
-                                        onSaved: (value) => authController
-                                            .emailController.text = value,
-                                      ),
-                                      InputField(
-                                        context: context,
-                                        textHint: 'Contraseña',
-                                        iconData: Peppex.bi_lock_fill,
-                                        isPassword: true,
-                                        hasRadius: false,
-                                        controller:
-                                            authController.passwordController,
-                                        validator: Validator().password,
-                                        onChanged: (value) => null,
-                                        onSaved: (value) => authController
-                                            .passwordController.text = value,
-                                      ),
-                                      // InputField(
-                                      //   context: context,
-                                      //   textHint: 'Confirmar contrasñea',
-                                      //   iconData: Peppex.bi_lock_fill,
-                                      //   isPassword: true,
-                                      //   hasRadius: false,
-                                      // ),
-                                      SizedBox(height: 22),
-                                      SizedBox(
-                                          child: MainButton(
-                                            buttonText: 'Registrarse',
-                                            function: null,
-                                            onPressed: () async {
-                                              if (_formKey.currentState
-                                                  .validate()) {
-                                                SystemChannels.textInput
-                                                    .invokeMethod(
-                                                        'TextInput.hide'); //to hide the keyboard - if any
-                                                authController
-                                                    .registerWithEmailAndPassword(
-                                                        context);
-                                              }
-                                            },
-                                          ),
-                                          width: 150)
-                                    ],
-                                  ),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: Colors.white),
+                      padding: const EdgeInsets.fromLTRB(53, 15, 53, 13),
+                      child: Stack(
+                        children: [
+                          Positioned.fill(
+                            top: 55.0,
+                            child: Form(
+                              key: _formKey,
+                              child: Container(
+                                child: Column(
+                                  children: [
+                                    SizedBox(height: 80),
+                                    InputField(
+                                      context: context,
+                                      textHint: 'Nombres y apellidos',
+                                      iconData: Peppex.bytesize_user,
+                                      isPassword: false,
+                                      hasRadius: false,
+                                      controller: authController.nameController,
+                                      validator: Validator().name,
+                                      onChanged: (value) => null,
+                                      onSaved: (value) => authController
+                                          .nameController.text = value,
+                                    ),
+                                    Divider(),
+                                    InputField(
+                                      context: context,
+                                      textHint: 'Correo electrónico',
+                                      iconData: Peppex.carbon_email,
+                                      isPassword: false,
+                                      hasRadius: false,
+                                      controller:
+                                          authController.emailController,
+                                      validator: Validator().email,
+                                      onChanged: (value) => null,
+                                      onSaved: (value) => authController
+                                          .emailController.text = value,
+                                    ),
+                                    Divider(),
+                                    InputField(
+                                      context: context,
+                                      textHint: 'Contraseña',
+                                      iconData: Peppex.bi_lock_fill,
+                                      isPassword: true,
+                                      hasRadius: false,
+                                      controller:
+                                          authController.passwordController,
+                                      validator: Validator().password,
+                                      onChanged: (value) => null,
+                                      onSaved: (value) => authController
+                                          .passwordController.text = value,
+                                    ),
+                                    Divider(),
+                                    SizedBox(height: 22),
+                                    SizedBox(
+                                        child: MainButton(
+                                          buttonText: 'Registrarse',
+                                          function: null,
+                                          onPressed: () async {
+                                            if (_formKey.currentState
+                                                .validate()) {
+                                              SystemChannels.textInput.invokeMethod(
+                                                  'TextInput.hide'); //to hide the keyboard - if any
+                                              authController
+                                                  .registerWithEmailAndPassword(
+                                                      context);
+                                            }
+                                          },
+                                        ),
+                                        width: 150)
+                                  ],
                                 ),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.white),
                               ),
                             ),
-                            Align(
-                              alignment: Alignment.topCenter,
-                              child: CircleAvatar(
-                                backgroundColor: Theme.of(context).primaryColor,
-                                radius: 45.0,
-                                child: Icon(Peppex.bytesize_user,
-                                    size: 40, color: Colors.white),
-                              ),
-                            )
-                          ],
-                        )),
+                          ),
+                          Align(
+                            alignment: Alignment.topCenter,
+                            child: CircleAvatar(
+                              backgroundColor: Theme.of(context).primaryColor,
+                              radius: 45.0,
+                              child: Icon(Peppex.bytesize_user,
+                                  size: 40, color: Colors.white),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
                   ),
                   Expanded(
                     flex: 1,

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'package:get/get.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+
 import 'package:peppex_delivery/models/models.dart';
 import 'package:peppex_delivery/ui/screens/screens.dart';
 
@@ -14,6 +17,7 @@ class AuthController extends GetxController {
   TextEditingController passwordController = TextEditingController();
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   Rx<User> userSnapshot = Rx<User>();
   Rx<UserModel> userModel = Rx<UserModel>();
@@ -90,26 +94,49 @@ class AuthController extends GetxController {
     }
   }
 
+  signInWithGoogle(BuildContext context) async {
+    try {
+      final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        idToken: googleAuth.idToken,
+        accessToken: googleAuth.accessToken,
+      );
+
+      UserCredential _credential = await _auth.signInWithCredential(credential);
+      DocumentSnapshot _snapshot =
+          await _db.collection('uses').doc(_credential.user.uid).get();
+
+      if (!_snapshot.exists) {
+        User _userSnapshot = await getUser;
+        UserModel _newUser = _createUserModel(_userSnapshot);
+
+        _createUserFirestore(_newUser, _userSnapshot);
+      }
+    } catch (error) {
+      print(error);
+      Get.snackbar(
+        'Hubo un error al iniciar sesión',
+        'Por favor, intente nuevamente',
+        snackPosition: SnackPosition.BOTTOM,
+        duration: Duration(seconds: 10),
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
+  }
+
   registerWithEmailAndPassword(BuildContext context) async {
     try {
-      await _auth
-          .createUserWithEmailAndPassword(
-              email: emailController.text, password: passwordController.text)
-          .then((result) async {
-        print('uID: ' + result.user.uid);
-        print('email: ' + result.user.email);
+      UserCredential credential = await _auth.createUserWithEmailAndPassword(
+          email: emailController.text, password: passwordController.text);
+      UserModel _newUser =
+          _createUserModel(credential.user, displayName: nameController.text);
 
-        //create the new user object
-        UserModel _newUser = UserModel(
-            uid: result.user.uid,
-            email: result.user.email,
-            displayName: nameController.text,
-            photoUrl: result.user.photoURL);
-        //create the user in firestore
-        _createUserFirestore(_newUser, result.user);
-        emailController.clear();
-        passwordController.clear();
-      });
+      _createUserFirestore(_newUser, credential.user);
+      emailController.clear();
+      passwordController.clear();
     } catch (error) {
       Get.snackbar(
         'Hubo un error al registrarse',
@@ -132,5 +159,14 @@ class AuthController extends GetxController {
     emailController.clear();
     passwordController.clear();
     return _auth.signOut();
+  }
+
+  UserModel _createUserModel(User user, {String displayName: ''}) {
+    return UserModel(
+      uid: user.uid,
+      email: user.email,
+      displayName: displayName == '' ? user.displayName : displayName,
+      photoUrl: user.photoURL,
+    );
   }
 }

@@ -65,12 +65,12 @@ class _InputFieldState extends State<InputField> {
         ),
         enabledBorder: OutlineInputBorder(
           borderSide: new BorderSide(
-            color: Colors.grey,
+            color: Colors.transparent,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderSide: new BorderSide(
-            color: Colors.grey,
+            color: Colors.transparent,
           ),
         ),
         suffixIcon: widget.isPassword

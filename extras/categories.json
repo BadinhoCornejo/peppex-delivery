@@ -1,0 +1,18 @@
+[
+    {
+        "uid": "1",
+        "categoryName": "Gustitos"
+    },
+    {
+        "uid": "2",
+        "categoryName": "Tacos"
+    },
+    {
+        "uid": "3",
+        "categoryName": "Quesadillas"
+    },
+    {
+        "uid": "4",
+        "categoryName": "Bebidas"
+    }
+]

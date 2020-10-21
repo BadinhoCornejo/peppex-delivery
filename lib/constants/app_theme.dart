@@ -38,7 +38,8 @@ ThemeData appTheme() => ThemeData(
         // sebas xd
         subtitle2: loginNormalStyle(),
         bodyText2: loginSecondaryStyle(),
-        headline3: frontText()
+        headline3: frontText(),
+        headline4: category() 
       ),
       inputDecorationTheme: InputDecorationTheme(
         border: _borderInput,
@@ -54,6 +55,7 @@ ThemeData appTheme() => ThemeData(
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
+          shape: MaterialStateProperty.all<OutlinedBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
           backgroundColor: MaterialStateProperty.all<Color>(PrimaryColor),
           padding: MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.only(top: 20, bottom: 20)),
           textStyle: MaterialStateProperty.all<TextStyle>(
@@ -66,14 +68,16 @@ ThemeData appTheme() => ThemeData(
             ),
           ),
         )
-      )
+      ),
     );
 
 AppBarTheme appBarTheme() => AppBarTheme(
-      color: Colors.transparent,
+      color: Colors.white,
+      elevation: 0,
       textTheme: TextTheme(
         headline6: headline6Style(),
       ),
+      iconTheme: IconThemeData(color: Color.fromRGBO(0, 0, 0, 0.54))
     );
 
 TextStyle headline6Style() => TextStyle(
@@ -140,4 +144,12 @@ TextStyle frontText() => TextStyle(
   fontSize: Headline6Size,
   color: Colors.white,
   letterSpacing: 0.15
+);
+
+TextStyle category() => TextStyle(
+  fontFamily: FontNameDefault,
+  fontWeight: FontWeight.w200,
+  fontSize: CaptionSize,
+  color: Colors.black,
+  letterSpacing: 0.4
 );

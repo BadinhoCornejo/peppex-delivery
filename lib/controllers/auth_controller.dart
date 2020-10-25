@@ -8,6 +8,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 import 'package:peppex_delivery/models/models.dart';
 import 'package:peppex_delivery/ui/screens/screens.dart';
+import 'package:peppex_delivery/ui/auth/auth.dart';
 
 class AuthController extends GetxController {
   static AuthController to = Get.find();
@@ -56,7 +57,6 @@ class AuthController extends GetxController {
   Stream<User> get user => _auth.authStateChanges();
 
   Stream<UserModel> streamFirestoreUser() {
-    print('streamFirestoreUser()');
     if (userSnapshot?.value?.uid != null) {
       return _db
           .doc('/users/${userSnapshot.value.uid}')

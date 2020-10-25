@@ -15,6 +15,15 @@ class UserModel {
     );
   }
 
+  factory UserModel.fromGuest(String uid) {
+    return UserModel(
+      uid: uid,
+      email: '',
+      displayName: '',
+      photoUrl: '',
+    );
+  }
+
   Map<String, dynamic> toJson() => {
         "uid": uid,
         "email": email,

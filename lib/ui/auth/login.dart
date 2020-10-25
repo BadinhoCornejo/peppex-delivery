@@ -115,7 +115,9 @@ class Login extends StatelessWidget {
                         ),
                         SizedBox(height: 18),
                         TextButton(
-                          onPressed: () {},
+                          onPressed: () async {
+                            authController.signInAsGuest(context);
+                          },
                           child: Text('Ingresar como invitado',
                               style: Theme.of(context).textTheme.subtitle2),
                         )

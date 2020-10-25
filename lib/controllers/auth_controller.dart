@@ -115,7 +115,21 @@ class AuthController extends GetxController {
         _createUserFirestore(_newUser, _userSnapshot);
       }
     } catch (error) {
-      print(error);
+      Get.snackbar(
+        'Hubo un error al iniciar sesión',
+        'Por favor, intente nuevamente',
+        snackPosition: SnackPosition.BOTTOM,
+        duration: Duration(seconds: 10),
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
+  }
+
+  signInAsGuest(BuildContext context) async {
+    try {
+      await _auth.signInAnonymously();
+    } catch (e) {
       Get.snackbar(
         'Hubo un error al iniciar sesión',
         'Por favor, intente nuevamente',

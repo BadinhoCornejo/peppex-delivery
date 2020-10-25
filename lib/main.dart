@@ -11,6 +11,5 @@ void main() async {
   await Firebase.initializeApp();
   await GetStorage.init();
   Get.put<AuthController>(AuthController());
-  Get.put<CounterController>(CounterController());
   runApp(App());
 }

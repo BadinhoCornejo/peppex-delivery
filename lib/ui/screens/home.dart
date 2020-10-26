@@ -32,15 +32,17 @@ class Home extends StatelessWidget {
                 height: 50,
                 margin: EdgeInsets.only(top: 15),
                 child: StreamBuilder<List<CategoryModel>>(
-                    stream: categoriesController.listCategories(),
-                    builder:
-                        (context, AsyncSnapshot<List<CategoryModel>> snapshot) {
-                      return ListView(
-                        scrollDirection: Axis.horizontal,
-                        children: snapshot.data.map(
-                            (category) => _categoryList(context, category)).toList(),
-                      );
-                    }),
+                  stream: categoriesController.listCategories(),
+                  builder:
+                      (context, AsyncSnapshot<List<CategoryModel>> snapshot) {
+                    return ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: snapshot.data
+                          .map((category) => _categoryList(context, category))
+                          .toList(),
+                    );
+                  },
+                ),
               ),
               SizedBox(
                 height: 30,

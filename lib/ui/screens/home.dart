@@ -22,10 +22,6 @@ class Home extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.only(top: 15, left: 10, right: 10),
-                child: Text(
-                  "Categorías",
-                  style: Theme.of(context).textTheme.subtitle1,
-                ),
               ),
               Container(
                 width: double.infinity,
@@ -47,6 +43,45 @@ class Home extends StatelessWidget {
               SizedBox(
                 height: 30,
               ),
+              Container(
+                width: double.infinity,
+                height: 200,
+                margin: EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+                child: Center(
+                  child: Obx(
+                    () => StreamBuilder<List<ProductModel>>(
+                      stream: categoriesController.listProducts(
+                        categoriesController.currentCategory?.uid,
+                      ),
+                      builder: (context,
+                          AsyncSnapshot<List<ProductModel>> snapshot) {
+                        if (!snapshot.hasData) {
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                        if (snapshot.data == null ||
+                            snapshot.data.length == 0) {
+                          return Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            child: Center(
+                              child: Text(
+                                'Aún no hay productos registrados en esta categoría',
+                                style: Theme.of(context).textTheme.bodyText1,
+                              ),
+                            ),
+                          );
+                        }
+                        return ListView(
+                          children: snapshot.data
+                              .map((product) => _listProducts(context, product))
+                              .toList(),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              )
             ],
           ),
           floatingActionButton: FloatingActionButton(
@@ -88,29 +123,16 @@ class Home extends StatelessWidget {
       ),
     );
   }
-}
 
-class ProductListItem extends StatelessWidget {
-  final Function onPressed;
-  final ProductModel product;
-  const ProductListItem(
-      {Key key, @required this.onPressed, @required this.product})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _listProducts(BuildContext context, ProductModel product) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-      child: MaterialButton(
-        padding: const EdgeInsets.all(0),
-        elevation: 0.5,
-        color: Colors.white,
-        clipBehavior: Clip.antiAlias,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
+      child: InkWell(
+        onTap: () {},
+        child: Text(
+          product.name,
+          style: TextStyle(fontSize: 20, color: Colors.black),
         ),
-        onPressed: onPressed,
-        child: Text(product.name),
       ),
     );
   }

@@ -109,7 +109,7 @@ class Home extends StatelessWidget {
           ),
           alignment: Alignment.center,
           margin: EdgeInsets.symmetric(horizontal: 10),
-          width: 90,
+          width: 115,
           height: 24,
           child: Text(
             category.name,

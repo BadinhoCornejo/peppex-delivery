@@ -44,7 +44,9 @@ class Register extends StatelessWidget {
               ),
             ),
             Container(
-              height: MediaQuery.of(context).size.height * 0.62,
+              constraints: BoxConstraints(
+                maxHeight: 425,
+              ),
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(53, 15, 53, 13),
                 child: Stack(

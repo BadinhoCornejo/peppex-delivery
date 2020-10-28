@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:peppex_delivery/controllers/controllers.dart';
 import 'package:peppex_delivery/ui/components/components.dart';
-import 'package:peppex_delivery/ui/screens/screens.dart';
+import 'register.dart';
 
 import 'package:get/get.dart';
 
@@ -115,7 +115,9 @@ class Login extends StatelessWidget {
                         ),
                         SizedBox(height: 18),
                         TextButton(
-                          onPressed: () {},
+                          onPressed: () async {
+                            authController.signInAsGuest(context);
+                          },
                           child: Text('Ingresar como invitado',
                               style: Theme.of(context).textTheme.subtitle2),
                         )

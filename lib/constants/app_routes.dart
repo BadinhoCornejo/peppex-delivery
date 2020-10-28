@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:peppex_delivery/ui/screens/screens.dart';
+import 'package:peppex_delivery/ui/auth/auth.dart';
 
 class AppRoutes {
   AppRoutes._();

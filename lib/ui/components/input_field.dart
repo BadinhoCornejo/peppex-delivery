@@ -54,6 +54,7 @@ class _InputFieldState extends State<InputField> {
       onSaved: widget.onSaved,
       style: Theme.of(context).textTheme.bodyText1,
       decoration: InputDecoration(
+        contentPadding: EdgeInsets.symmetric(vertical: 8),
         prefixIcon: Icon(widget.iconData, size: 20),
         hintText: widget.textHint,
         border: OutlineInputBorder(

@@ -5,12 +5,12 @@ class MainButton extends StatelessWidget {
   final String buttonText;
   final void Function() onPressed;
 
-  MainButton(
-      {Key key,
-      @required this.onPressed,
-      @required this.buttonText,
-      @required this.function})
-      : super(key: key);
+  MainButton({
+    Key key,
+    @required this.onPressed,
+    @required this.buttonText,
+    @required this.function,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

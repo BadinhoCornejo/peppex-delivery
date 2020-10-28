@@ -31,9 +31,9 @@ class Login extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Expanded(
-                  child: ListView(
+              ListView(
                 shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
                 children: [
                   SizedBox(
                     height: 60,
@@ -94,7 +94,7 @@ class Login extends StatelessWidget {
                                     .signInWithEmailAndPassword(context);
                               }
                             }),
-                        SizedBox(height: 14),
+                        SizedBox(height: 6),
                         ElevatedButton.icon(
                           onPressed: () async {
                             authController.signInWithGoogle(context);
@@ -102,6 +102,7 @@ class Login extends StatelessWidget {
                           icon: Icon(
                             FontAwesomeIcons.google,
                             color: Colors.white,
+                            size: 16,
                           ),
                           label: Text(
                             'Ingresar con Google',
@@ -113,7 +114,7 @@ class Login extends StatelessWidget {
                             ),
                           ),
                         ),
-                        SizedBox(height: 18),
+                        SizedBox(height: 8),
                         TextButton(
                           onPressed: () async {
                             authController.signInAsGuest(context);
@@ -124,27 +125,27 @@ class Login extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Container(
-                      height: MediaQuery.of(context).size.height * 0.23,
-                      alignment: Alignment.bottomCenter,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text('¿No tienes cuenta?',
-                              style: Theme.of(context).textTheme.subtitle2),
-                          TextButton(
-                            onPressed: () => Get.to(Register()),
-                            child: Text('Regístrate',
-                                style: Theme.of(context).textTheme.bodyText2),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
                 ],
-              )),
+              ),
+              Container(
+                padding: const EdgeInsets.all(5.0),
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  alignment: Alignment.bottomCenter,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('¿No tienes cuenta?',
+                          style: Theme.of(context).textTheme.subtitle2),
+                      TextButton(
+                        onPressed: () => Get.to(Register()),
+                        child: Text('Regístrate',
+                            style: Theme.of(context).textTheme.bodyText2),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
         ),

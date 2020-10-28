@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+const PrimaryColor = Color.fromRGBO(255, 204, 0, 1);
+
 const Headline5Size = 24.0;
 const Headline6Size = 20.0;
 const Body1Size = 16.0;
@@ -18,11 +20,11 @@ const _borderInput = OutlineInputBorder(
 
 ThemeData appTheme() => ThemeData(
       brightness: Brightness.light,
-      primaryColor: Colors.yellow[700],
+      primaryColor: PrimaryColor,
       accentColor: Colors.yellowAccent[400],
-      hintColor: Colors.yellow[700],
+      hintColor: PrimaryColor,
       dividerColor: Colors.black.withOpacity(0.54),
-      buttonColor: Colors.yellow[700],
+      buttonColor: PrimaryColor,
       appBarTheme: appBarTheme(),
       textTheme: TextTheme(
           headline6: headline6Style(),
@@ -50,9 +52,9 @@ ThemeData appTheme() => ThemeData(
         style: ButtonStyle(
           shape: MaterialStateProperty.all<OutlinedBorder>(
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
-          backgroundColor: MaterialStateProperty.all<Color>(Colors.yellow[700]),
+          backgroundColor: MaterialStateProperty.all<Color>(PrimaryColor),
           padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-              EdgeInsets.only(top: 20, bottom: 20)),
+              EdgeInsets.symmetric(vertical: 8)),
           textStyle: MaterialStateProperty.all<TextStyle>(
             TextStyle(
               fontFamily: FontNameDefault,
@@ -92,7 +94,7 @@ TextStyle body1Style() => TextStyle(
 
 TextStyle primaryButtonTextStyle() => TextStyle(
       fontFamily: FontNameDefault,
-      fontWeight: FontWeight.w500,
+      fontWeight: FontWeight.normal,
       fontSize: Body1Size,
       color: Colors.black,
       letterSpacing: 1.25,
@@ -128,7 +130,7 @@ TextStyle loginSecondaryStyle() => TextStyle(
       fontFamily: FontNameDefault,
       fontWeight: FontWeight.w500,
       fontSize: Body2Size,
-      color: Colors.yellow[700],
+      color: PrimaryColor,
       letterSpacing: 0.15,
     );
 

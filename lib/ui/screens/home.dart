@@ -102,12 +102,15 @@ class Home extends StatelessWidget {
         },
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: Color.fromARGB(100, 240, 240, 240),
+            borderRadius: BorderRadius.circular(8),
+            color: categoriesController.currentCategory.uid == category.uid
+                ? Theme.of(context).primaryColor
+                : Color.fromARGB(100, 240, 240, 240),
           ),
           alignment: Alignment.center,
           margin: EdgeInsets.symmetric(horizontal: 10),
-          width: 150,
+          width: 90,
+          height: 24,
           child: Text(
             category.name,
             style: TextStyle(
@@ -116,7 +119,7 @@ class Home extends StatelessWidget {
               fontWeight:
                   categoriesController.currentCategory.uid == category.uid
                       ? FontWeight.bold
-                      : FontWeight.normal,
+                      : FontWeight.w200,
             ),
           ),
         ),

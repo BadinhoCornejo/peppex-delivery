@@ -10,8 +10,6 @@ class CategoriesController extends GetxController {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
   Rx<CategoryModel> category = Rx<CategoryModel>();
-  Rx<List<CategoryModel>> categoriesStream = Rx<List<CategoryModel>>();
-  Rx<List<ProductModel>> productsStream = Rx<List<ProductModel>>();
 
   @override
   void onInit() {

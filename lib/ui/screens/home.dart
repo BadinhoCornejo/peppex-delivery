@@ -3,6 +3,8 @@ import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:peppex_delivery/controllers/controllers.dart';
 import 'package:peppex_delivery/models/models.dart';
+import 'package:peppex_delivery/ui/components/product.dart';
+import 'package:peppex_delivery/ui/components/top_app_bar.dart';
 
 class Home extends StatelessWidget {
   final AuthController authController = Get.put(AuthController());
@@ -12,12 +14,8 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) => SafeArea(
         child: Scaffold(
-          appBar: AppBar(
-            title: Text('Esto es Peppex'),
-            bottomOpacity: 0.0,
-            elevation: 0.0,
-            backgroundColor: Colors.transparent,
-          ),
+          backgroundColor: Colors.white,
+          appBar: TopAppBar(appBarText: 'Menú'),
           body: ListView(
             children: [
               Padding(
@@ -45,7 +43,7 @@ class Home extends StatelessWidget {
               ),
               Container(
                 width: double.infinity,
-                height: 200,
+                height: MediaQuery.of(context).size.height - 50 - TopAppBar().preferredSize.height,
                 margin: EdgeInsets.symmetric(horizontal: 8, vertical: 10),
                 child: Center(
                   child: Obx(
@@ -72,10 +70,12 @@ class Home extends StatelessWidget {
                             ),
                           );
                         }
-                        return ListView(
-                          children: snapshot.data
-                              .map((product) => _listProducts(context, product))
-                              .toList(),
+                        return GridView.count(
+                          crossAxisCount: 2,
+                          children: List.generate(
+                            snapshot.data.length, (index) => 
+                            _listProducts(context, snapshot.data[index])
+                          )
                         );
                       },
                     ),
@@ -130,13 +130,17 @@ class Home extends StatelessWidget {
   Widget _listProducts(BuildContext context, ProductModel product) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-      child: InkWell(
+      child: ProductThumb(product: product)
+    );
+  }
+}
+
+/*
+InkWell(
         onTap: () {},
         child: Text(
           product.name,
           style: TextStyle(fontSize: 20, color: Colors.black),
         ),
       ),
-    );
-  }
-}
+*/

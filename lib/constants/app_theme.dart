@@ -36,7 +36,9 @@ ThemeData appTheme() => ThemeData(
           // sebas xd
           subtitle2: loginNormalStyle(),
           bodyText2: loginSecondaryStyle(),
-          headline3: frontText()),
+          headline3: frontText(),
+          headline5: productText(),
+          headline4: productPrice()),
       inputDecorationTheme: InputDecorationTheme(
           border: _borderInput,
           fillColor: Colors.white,
@@ -140,3 +142,19 @@ TextStyle frontText() => TextStyle(
     fontSize: Headline6Size,
     color: Colors.white,
     letterSpacing: 0.15);
+
+TextStyle productText() => TextStyle(
+  fontFamily: FontNameDefault,
+  fontWeight: FontWeight.w400,
+  fontSize: CaptionSize,
+  color: Colors.black,
+  letterSpacing: 0.4
+);
+
+TextStyle productPrice() => TextStyle(
+  fontFamily: FontNameDefault,
+  fontWeight: FontWeight.w700,
+  fontSize: Body2Size,
+  color: Colors.black,
+  letterSpacing: 0.15
+);

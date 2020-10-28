@@ -19,7 +19,7 @@ class TopAppBar extends StatelessWidget with PreferredSizeWidget {
       actions: [
         IconButton(
           icon: Icon(Peppex.eva_search_outline),
-          onPressed: () {}
+          onPressed: () { print(preferredSize.height); }
         ),
         IconButton(
           icon: Icon(Peppex.ant_design_shopping_cart_outlined),

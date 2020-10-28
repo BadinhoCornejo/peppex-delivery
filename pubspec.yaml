@@ -60,6 +60,7 @@ flutter:
   - assets/images/
   - extras/
   - extras/categories.json
+  - extras/products.json
 
   #   - images/a_dot_ham.jpeg
 

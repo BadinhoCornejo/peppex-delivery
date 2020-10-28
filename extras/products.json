@@ -1,0 +1,34 @@
+[
+    {
+        "uid": "1",
+        "name": "Taco de Pollo",
+        "price": 15.25,
+        "imageUrl": "https://www.hola.com/imagenes/cocina/recetas/20190711145603/tacos-pollo-salsa-barbacoa/0-700-282/tacos-pollo-barbacoa-m.jpg",
+        "rating": 4.5,
+        "total": 16
+    },
+    {
+        "uid": "2",
+        "name": "Taco de Cerdo",
+        "price": 20.25,
+        "imageUrl": "https://tacos10.com/wp-content/uploads/2019/01/Tacos-de-cerdo-frito.jpg",
+        "rating": 3.5,
+        "total": 8
+    },
+    {
+        "uid": "3",
+        "name": "Quesadilla",
+        "price": 9,
+        "imageUrl": "https://www.vvsupremo.com/wp-content/uploads/2015/11/900X570_Two-Cheese-Quesadillas.jpg",
+        "rating": 4,
+        "total": 20
+    },
+    {
+        "uid": "4",
+        "name": "Pollo Broaster",
+        "price": 8.50,
+        "imageUrl": "https://exitosanoticias.pe/v1/wp-content/uploads/2020/04/pollo.png",
+        "rating": 5,
+        "total": 35
+    }
+]

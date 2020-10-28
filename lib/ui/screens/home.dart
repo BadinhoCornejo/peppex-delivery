@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:peppex_delivery/controllers/auth_controller.dart';
 import 'package:peppex_delivery/ui/components/categories.dart';
+import 'package:peppex_delivery/ui/components/products.dart';
 import 'package:peppex_delivery/ui/components/top_app_bar.dart';
 
 //import 'package:peppex_delivery/controllers/counter_controller.dart';
@@ -20,8 +21,7 @@ class Home extends StatelessWidget {
           children: [
             Categories(),
             Expanded(
-              flex: 3,
-              child: Container(),
+              child: ProductsContainer()
             )
           ],
         ),

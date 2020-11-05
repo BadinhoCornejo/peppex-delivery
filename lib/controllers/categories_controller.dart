@@ -30,7 +30,7 @@ class CategoriesController extends GetxController {
         .collection('products')
         .snapshots()
         .map((QuerySnapshot query) =>
-            query.docs.map((e) => ProductModel.fromMap(e)).toList());
+            query.docs.map((e) => ProductModel.fromSnapshot(e)).toList());
   }
 
   Stream<CategoryModel> defaultCategory() {

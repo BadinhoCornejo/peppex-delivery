@@ -24,8 +24,40 @@ class CartController extends GetxController {
         query.docs.map((e) => CartItemModel.fromMap(e)).toList());
   }
 
-  void addProduct(CartItemModel cartItem) {
-    // TODO: Verificar si ya existe el producto comprobando el productRef
+  void addProduct(ProductModel product) async {
+    QuerySnapshot res = await userDoc
+        .collection('cart')
+        .where('productRef', isEqualTo: product.uid)
+        .get();
+
+    if (res.isNull) {
+      CartItemModel cartItem = new CartItemModel(
+          uid: '',
+          product: product,
+          productReference: product.uid,
+          quantity: 1);
+
+      this.newProduct(cartItem);
+    } else {
+      CartItemModel cartItem = CartItemModel.fromMap(res.docs[0]);
+
+      cartItem.quantity += 1;
+      this.updateProduct(cartItem);
+    }
+  }
+
+  void removeProduct(CartItemModel cartItem) {
+    if (cartItem.quantity == 1) {
+      userDoc.collection('cart').doc(cartItem.uid).delete();
+    } else {
+      cartItem.quantity -= 1;
+      this.updateProduct(cartItem);
+    }
+  }
+
+  void cleanCart() {
+    userDoc.collection('cart').snapshots().forEach((res) =>
+        res.docs.forEach((e) => userDoc.collection('cart').doc(e.id).delete()));
   }
 
   void newProduct(CartItemModel cartItem) {

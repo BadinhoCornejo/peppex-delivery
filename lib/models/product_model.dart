@@ -8,11 +8,20 @@ class ProductModel {
 
   ProductModel({this.uid, this.name, this.imageUrl, this.price});
 
-  factory ProductModel.fromMap(DocumentSnapshot documentSnapshot) {
+  factory ProductModel.fromSnapshot(DocumentSnapshot documentSnapshot) {
     Map data = documentSnapshot.data();
 
     return ProductModel(
       uid: documentSnapshot.id,
+      name: data['name'] ?? '',
+      imageUrl: data['imageUrl'] ?? '',
+      price: data['price'] ?? 0,
+    );
+  }
+
+  factory ProductModel.fromMap(Map<String, dynamic> data) {
+    return ProductModel(
+      uid: '',
       name: data['name'] ?? '',
       imageUrl: data['imageUrl'] ?? '',
       price: data['price'] ?? 0,

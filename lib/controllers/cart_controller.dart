@@ -41,21 +41,21 @@ class CartController extends GetxController {
       this.newProduct(cartItem);
     } else {
       CartItemModel cartItem = CartItemModel.fromMap(res.docs[0]);
-      plusOne(cartItem);
+      add(cartItem);
     }
   }
 
-  plusOne(CartItemModel cartItem) {
+  void add(CartItemModel cartItem) {
     cartItem.quantity += 1;
-    this.updateProduct(cartItem);
+    this.updateCartItem(cartItem);
   }
 
-  void removeProduct(CartItemModel cartItem) {
+  void quit(CartItemModel cartItem) {
     if (cartItem.quantity == 1) {
       userDoc.collection('cart').doc(cartItem.uid).delete();
     } else {
       cartItem.quantity -= 1;
-      this.updateProduct(cartItem);
+      this.updateCartItem(cartItem);
     }
   }
 
@@ -68,7 +68,7 @@ class CartController extends GetxController {
     userDoc.collection('cart').add(cartItem.toJson());
   }
 
-  void updateProduct(CartItemModel cartItem) {
+  void updateCartItem(CartItemModel cartItem) {
     userDoc.collection('cart').doc(cartItem.uid).set(cartItem.toJson());
   }
 }

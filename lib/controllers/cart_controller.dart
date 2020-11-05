@@ -38,7 +38,7 @@ class CartController extends GetxController {
         quantity: 1,
       );
 
-      this.newProduct(cartItem);
+      this._newProduct(cartItem);
     } else {
       CartItemModel cartItem = CartItemModel.fromMap(res.docs[0]);
       add(cartItem);
@@ -64,7 +64,7 @@ class CartController extends GetxController {
         res.docs.forEach((e) => userDoc.collection('cart').doc(e.id).delete()));
   }
 
-  void newProduct(CartItemModel cartItem) {
+  void _newProduct(CartItemModel cartItem) {
     userDoc.collection('cart').add(cartItem.toJson());
   }
 

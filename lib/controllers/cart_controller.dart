@@ -32,18 +32,22 @@ class CartController extends GetxController {
 
     if (res.isNull) {
       CartItemModel cartItem = new CartItemModel(
-          uid: '',
-          product: product,
-          productReference: product.uid,
-          quantity: 1);
+        uid: '',
+        product: product,
+        productReference: product.uid,
+        quantity: 1,
+      );
 
       this.newProduct(cartItem);
     } else {
       CartItemModel cartItem = CartItemModel.fromMap(res.docs[0]);
-
-      cartItem.quantity += 1;
-      this.updateProduct(cartItem);
+      plusOne(cartItem);
     }
+  }
+
+  plusOne(CartItemModel cartItem) {
+    cartItem.quantity += 1;
+    this.updateProduct(cartItem);
   }
 
   void removeProduct(CartItemModel cartItem) {

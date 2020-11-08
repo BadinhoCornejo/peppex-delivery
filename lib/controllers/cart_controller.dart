@@ -24,13 +24,15 @@ class CartController extends GetxController {
         query.docs.map((e) => CartItemModel.fromMap(e)).toList());
   }
 
-  void addProduct(ProductModel product) async {
+  Future<bool> addProduct(ProductModel product) async {
+    bool productAdded = false;
+
     QuerySnapshot res = await userDoc
         .collection('cart')
         .where('productRef', isEqualTo: product.uid)
         .get();
 
-    if (res.isNull) {
+    if (res.isNull && product.status == 1) {
       CartItemModel cartItem = new CartItemModel(
         uid: '',
         product: product,
@@ -39,10 +41,16 @@ class CartController extends GetxController {
       );
 
       this._newProduct(cartItem);
-    } else {
+      productAdded = true;
+    } else if (product.status == 1) {
       CartItemModel cartItem = CartItemModel.fromMap(res.docs[0]);
       add(cartItem);
+      productAdded = true;
+    } else {
+      productAdded = false;
     }
+
+    return productAdded;
   }
 
   void add(CartItemModel cartItem) {

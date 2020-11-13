@@ -1,30 +1,19 @@
 import 'dart:async';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:peppex_delivery/models/models.dart';
-import 'auth_controller.dart';
 
 class CartController extends GetxController {
   static CartController to = Get.find();
-  final AuthController _authController = AuthController.to;
-  final FirebaseFirestore _db = FirebaseFirestore.instance;
-  DocumentReference userDoc;
-  Rx<User> userSnapshot = Rx<User>();
 
-  @override
-  void onInit() async {
-    userSnapshot.value = await _authController.getUser;
-    userDoc = _db.collection('users').doc(userSnapshot.value.uid);
-  }
-
-  Stream<List<CartItemModel>> listCart() {
+  Stream<List<CartItemModel>> listCart(DocumentReference userDoc) {
     return userDoc.collection('cart').snapshots().map((QuerySnapshot query) =>
         query.docs.map((e) => CartItemModel.fromMap(e)).toList());
   }
 
-  Future<bool> addProduct(ProductModel product) async {
+  Future<bool> addProduct(
+      DocumentReference userDoc, ProductModel product) async {
     bool productAdded = false;
 
     QuerySnapshot res = await userDoc
@@ -40,11 +29,11 @@ class CartController extends GetxController {
         quantity: 1,
       );
 
-      this._newProduct(cartItem);
+      this._newProduct(userDoc, cartItem);
       productAdded = true;
     } else if (product.status == 1) {
       CartItemModel cartItem = CartItemModel.fromMap(res.docs[0]);
-      add(cartItem);
+      add(userDoc, cartItem);
       productAdded = true;
     } else {
       productAdded = false;
@@ -53,30 +42,30 @@ class CartController extends GetxController {
     return productAdded;
   }
 
-  void add(CartItemModel cartItem) {
+  void add(DocumentReference userDoc, CartItemModel cartItem) {
     cartItem.quantity += 1;
-    this.updateCartItem(cartItem);
+    this.updateCartItem(userDoc, cartItem);
   }
 
-  void quit(CartItemModel cartItem) {
+  void quit(DocumentReference userDoc, CartItemModel cartItem) {
     if (cartItem.quantity == 1) {
       userDoc.collection('cart').doc(cartItem.uid).delete();
     } else {
       cartItem.quantity -= 1;
-      this.updateCartItem(cartItem);
+      this.updateCartItem(userDoc, cartItem);
     }
   }
 
-  void cleanCart() {
+  void cleanCart(DocumentReference userDoc) {
     userDoc.collection('cart').snapshots().forEach((res) =>
         res.docs.forEach((e) => userDoc.collection('cart').doc(e.id).delete()));
   }
 
-  void _newProduct(CartItemModel cartItem) {
-    userDoc.collection('cart').add(cartItem.toJson());
+  void updateCartItem(DocumentReference userDoc, CartItemModel cartItem) {
+    userDoc.collection('cart').doc(cartItem.uid).set(cartItem.toJson());
   }
 
-  void updateCartItem(CartItemModel cartItem) {
-    userDoc.collection('cart').doc(cartItem.uid).set(cartItem.toJson());
+  void _newProduct(DocumentReference userDoc, CartItemModel cartItem) async {
+    userDoc.collection('cart').add(cartItem.toJson());
   }
 }

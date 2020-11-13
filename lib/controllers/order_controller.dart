@@ -1,34 +1,19 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:peppex_delivery/controllers/controllers.dart';
 import 'package:peppex_delivery/models/models.dart';
-import 'auth_controller.dart';
 
 class OrderController extends GetxController {
   static OrderController to = Get.find();
-  final AuthController _authController = AuthController.to;
-  final FirebaseFirestore _db = FirebaseFirestore.instance;
-  DocumentReference userDoc;
-  Rx<User> userSnapshot = Rx<User>();
 
-  @override
-  void onInit() async {
-    userSnapshot.value = await _authController.getUser;
-    userDoc = _db.collection('users').doc(userSnapshot.value.uid);
-  }
-
-  void newOrder(String customerName, String customerDoc, String address) async {
-    QuerySnapshot cart = await userDoc.collection('cart').get();
-    List<CartItemModel> cartItems =
-        cart.docs.map((e) => CartItemModel.fromMap(e)).toList();
+  Future<DocumentReference> newOrder(
+      DocumentReference userDoc,
+      String customerName,
+      String customerDoc,
+      String address,
+      num amount) async {
+    List<CartItemModel> cartItems = await _getCartItems(userDoc);
     List<String> products = cartItems.map((e) => e.productReference).toList();
-    num amount = 0;
-
-    cartItems.forEach((element) {
-      amount = amount + (element.product.price * element.quantity);
-    });
 
     OrderModel order = new OrderModel(
       uid: '',
@@ -40,6 +25,22 @@ class OrderController extends GetxController {
       products: products,
     );
 
-    userDoc.collection('orders').add(order.toJson());
+    return userDoc.collection('orders').add(order.toJson());
+  }
+
+  Future<num> calcAmount(DocumentReference userDoc) async {
+    List<CartItemModel> cartItems = await _getCartItems(userDoc);
+    num amount = 0;
+
+    cartItems.forEach((element) {
+      amount = amount + (element.product.price * element.quantity);
+    });
+
+    return amount;
+  }
+
+  Future<List<CartItemModel>> _getCartItems(DocumentReference userDoc) async {
+    QuerySnapshot cart = await userDoc.collection('cart').get();
+    return cart.docs.map((e) => CartItemModel.fromMap(e)).toList();
   }
 }

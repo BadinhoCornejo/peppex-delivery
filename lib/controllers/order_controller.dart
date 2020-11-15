@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -12,7 +13,7 @@ class OrderController extends GetxController {
       String customerDoc,
       String address,
       num amount) async {
-    List<CartItemModel> cartItems = await _getCartItems(userDoc);
+    List<CartItemModel> cartItems = await getCartItems(userDoc);
     List<String> products = cartItems.map((e) => e.productReference).toList();
 
     OrderModel order = new OrderModel(
@@ -29,7 +30,7 @@ class OrderController extends GetxController {
   }
 
   Future<num> calcAmount(DocumentReference userDoc) async {
-    List<CartItemModel> cartItems = await _getCartItems(userDoc);
+    List<CartItemModel> cartItems = await getCartItems(userDoc);
     num amount = 0;
 
     cartItems.forEach((element) {
@@ -39,7 +40,8 @@ class OrderController extends GetxController {
     return amount;
   }
 
-  Future<List<CartItemModel>> _getCartItems(DocumentReference userDoc) async {
+  @visibleForTesting
+  Future<List<CartItemModel>> getCartItems(DocumentReference userDoc) async {
     QuerySnapshot cart = await userDoc.collection('cart').get();
     return cart.docs.map((e) => CartItemModel.fromMap(e)).toList();
   }

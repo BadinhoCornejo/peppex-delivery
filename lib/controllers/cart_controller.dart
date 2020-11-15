@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:get/get.dart';
 
@@ -12,60 +13,131 @@ class CartController extends GetxController {
         query.docs.map((e) => CartItemModel.fromMap(e)).toList());
   }
 
-  Future<bool> addProduct(
-      DocumentReference userDoc, ProductModel product) async {
-    bool productAdded = false;
+  addProduct({
+    DocumentReference userDoc,
+    ProductModel product,
+    BuildContext context,
+  }) async {
+    try {
+      QuerySnapshot res = await userDoc
+          .collection('cart')
+          .where('productRef', isEqualTo: product.uid)
+          .get();
 
-    QuerySnapshot res = await userDoc
-        .collection('cart')
-        .where('productRef', isEqualTo: product.uid)
-        .get();
+      if (res.isNull && product.status == 1) {
+        CartItemModel cartItem = new CartItemModel(
+          uid: '',
+          product: product,
+          productReference: product.uid,
+          quantity: 1,
+        );
 
-    if (res.isNull && product.status == 1) {
-      CartItemModel cartItem = new CartItemModel(
-        uid: '',
-        product: product,
-        productReference: product.uid,
-        quantity: 1,
+        await this._newProduct(userDoc, cartItem);
+        Get.snackbar(
+          '¡Producto agregado al carrito!',
+          'Clic aquí para ver su carrito',
+          icon: Icon(Icons.check_circle),
+          shouldIconPulse: true,
+          onTap: (_) {
+            // Get.to(Cart());
+          },
+          snackPosition: SnackPosition.BOTTOM,
+          duration: Duration(seconds: 10),
+          backgroundColor: Theme.of(context).primaryColor,
+          colorText: Colors.white,
+        );
+      } else if (product.status == 1) {
+        CartItemModel cartItem = CartItemModel.fromMap(res.docs[0]);
+        add(userDoc, cartItem);
+        Get.snackbar(
+          '¡Te gusta mucho este producto!',
+          'Clic aquí para ver su carrito',
+          icon: Icon(
+            Icons.local_fire_department,
+            color: Colors.redAccent,
+          ),
+          shouldIconPulse: true,
+          onTap: (_) {
+            // Get.to(Cart());
+          },
+          snackPosition: SnackPosition.BOTTOM,
+          duration: Duration(seconds: 10),
+          backgroundColor: Theme.of(context).primaryColor,
+          colorText: Colors.white,
+        );
+      } else {
+        Get.snackbar(
+          'Lo sentimos. Este producto no está dispnible',
+          'Aún tenemos preparados deliciosos platillos :)',
+          icon: Icon(Icons.info_outline),
+          snackPosition: SnackPosition.BOTTOM,
+          duration: Duration(seconds: 10),
+          backgroundColor: Colors.lightBlue,
+          colorText: Colors.white,
+        );
+      }
+    } catch (e) {
+      Get.snackbar(
+        '¡Ups! Hubo un error al agregar este producto',
+        'Por favor, intente nuevamente.',
+        icon: Icon(Icons.error_outline),
+        snackPosition: SnackPosition.BOTTOM,
+        duration: Duration(seconds: 10),
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
       );
-
-      this._newProduct(userDoc, cartItem);
-      productAdded = true;
-    } else if (product.status == 1) {
-      CartItemModel cartItem = CartItemModel.fromMap(res.docs[0]);
-      add(userDoc, cartItem);
-      productAdded = true;
-    } else {
-      productAdded = false;
-    }
-
-    return productAdded;
-  }
-
-  void add(DocumentReference userDoc, CartItemModel cartItem) {
-    cartItem.quantity += 1;
-    this.updateCartItem(userDoc, cartItem);
-  }
-
-  void quit(DocumentReference userDoc, CartItemModel cartItem) {
-    if (cartItem.quantity == 1) {
-      userDoc.collection('cart').doc(cartItem.uid).delete();
-    } else {
-      cartItem.quantity -= 1;
-      this.updateCartItem(userDoc, cartItem);
     }
   }
 
-  void cleanCart(DocumentReference userDoc) {
-    userDoc.collection('cart').snapshots().forEach((res) =>
-        res.docs.forEach((e) => userDoc.collection('cart').doc(e.id).delete()));
+  add(DocumentReference userDoc, CartItemModel cartItem) async {
+    try {
+      cartItem.quantity += 1;
+      await this._updateCartItem(userDoc, cartItem);
+    } catch (e) {
+      Get.snackbar(
+        '¡Ups! Hubo un error al agregar este producto',
+        'Por favor, intente nuevamente.',
+        icon: Icon(Icons.error_outline),
+        snackPosition: SnackPosition.BOTTOM,
+        duration: Duration(seconds: 10),
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
   }
 
-  void updateCartItem(DocumentReference userDoc, CartItemModel cartItem) {
-    userDoc.collection('cart').doc(cartItem.uid).set(cartItem.toJson());
+  quit(DocumentReference userDoc, CartItemModel cartItem) async {
+    try {
+      if (cartItem.quantity == 1) {
+        await userDoc.collection('cart').doc(cartItem.uid).delete();
+      } else {
+        cartItem.quantity -= 1;
+        await this._updateCartItem(userDoc, cartItem);
+      }
+    } catch (e) {
+      Get.snackbar(
+        '¡Ups! Hubo un error al quitar este producto',
+        'Por favor, intente nuevamente.',
+        icon: Icon(Icons.error_outline),
+        snackPosition: SnackPosition.BOTTOM,
+        duration: Duration(seconds: 10),
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
   }
 
-  void _newProduct(DocumentReference userDoc, CartItemModel cartItem) async {
-    userDoc.collection('cart').add(cartItem.toJson());
+  cleanCart(DocumentReference userDoc) {
+    userDoc.collection('cart').snapshots().forEach((res) => res.docs.forEach(
+        (e) async => await userDoc.collection('cart').doc(e.id).delete()));
+  }
+
+  _updateCartItem(DocumentReference userDoc, CartItemModel cartItem) async {
+    await userDoc.collection('cart').doc(cartItem.uid).set(cartItem.toJson());
+  }
+
+  Future<DocumentReference> _newProduct(
+      DocumentReference userDoc, CartItemModel cartItem) async {
+    return await userDoc.collection('cart').add(cartItem.toJson());
   }
 }

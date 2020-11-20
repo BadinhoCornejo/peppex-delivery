@@ -32,7 +32,7 @@ class CartController extends GetxController {
           quantity: 1,
         );
 
-        await this._newProduct(userDoc, cartItem);
+        await this.newProduct(userDoc, cartItem);
         Get.snackbar(
           '¡Producto agregado al carrito!',
           'Clic aquí para ver su carrito',
@@ -136,7 +136,8 @@ class CartController extends GetxController {
     await userDoc.collection('cart').doc(cartItem.uid).set(cartItem.toJson());
   }
 
-  Future<DocumentReference> _newProduct(
+  @visibleForTesting
+  Future<DocumentReference> newProduct(
       DocumentReference userDoc, CartItemModel cartItem) async {
     return await userDoc.collection('cart').add(cartItem.toJson());
   }

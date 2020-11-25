@@ -58,7 +58,7 @@ class CartController extends GetxController {
           ),
           shouldIconPulse: true,
           onTap: (_) {
-            // Get.to(Cart());
+            Get.to(Cart());
           },
           snackPosition: SnackPosition.BOTTOM,
           duration: Duration(seconds: 10),

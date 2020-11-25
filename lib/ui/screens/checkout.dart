@@ -6,6 +6,7 @@ import 'package:peppex_delivery/controllers/controllers.dart';
 import 'package:peppex_delivery/helpers/helpers.dart';
 import 'package:peppex_delivery/ui/components/components.dart';
 import 'package:peppex_delivery/ui/components/input_field_generic.dart';
+import 'package:peppex_delivery/ui/components/myorder_map.dart';
 import 'package:peppex_delivery/ui/components/top_app_bar.dart';
 
 class Checkout extends StatelessWidget {
@@ -105,6 +106,23 @@ class Checkout extends StatelessWidget {
                           print(res);
                           if (res) {
                             cartController.cleanCart(userDoc);
+                            Get.snackbar(
+                              '¡Tu orden fue generada!',
+                              'A continuación, verás el recorrido de tu pedido',
+                              icon: Icon(
+                                Icons.check_circle_outline,
+                                color: Colors.green,
+                              ),
+                              shouldIconPulse: true,
+                              onTap: (_) {
+                                // Get.to(MyOrderMap());
+                              },
+                              snackPosition: SnackPosition.BOTTOM,
+                              duration: Duration(seconds: 10),
+                              backgroundColor: Theme.of(context).primaryColor,
+                              colorText: Colors.white,
+                            );
+                            Get.to(MyOrderMap());
                           } else {
                             Get.snackbar(
                               'No se pudo generar la orden',

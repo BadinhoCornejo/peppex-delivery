@@ -3,10 +3,12 @@ import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:peppex_delivery/controllers/controllers.dart';
 import 'package:peppex_delivery/models/models.dart';
+import 'package:peppex_delivery/ui/components/bot_nav_bar.dart';
 import 'package:peppex_delivery/ui/components/product.dart';
 import 'package:peppex_delivery/ui/components/top_app_bar.dart';
 
 class Home extends StatelessWidget {
+
   final AuthController authController = Get.put(AuthController());
   final CategoriesController categoriesController =
       Get.put(CategoriesController());
@@ -16,6 +18,7 @@ class Home extends StatelessWidget {
         child: Scaffold(
           backgroundColor: Colors.white,
           appBar: TopAppBar(appBarText: 'Menú'),
+          bottomNavigationBar: BottomNavBar(currentIndex: 0),
           body: ListView(
             children: [
               Padding(
@@ -134,13 +137,3 @@ class Home extends StatelessWidget {
     );
   }
 }
-
-/*
-InkWell(
-        onTap: () {},
-        child: Text(
-          product.name,
-          style: TextStyle(fontSize: 20, color: Colors.black),
-        ),
-      ),
-*/

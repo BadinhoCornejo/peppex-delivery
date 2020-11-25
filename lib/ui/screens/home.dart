@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:peppex_delivery/controllers/controllers.dart';
 import 'package:peppex_delivery/models/models.dart';
@@ -46,7 +45,9 @@ class Home extends StatelessWidget {
               ),
               Container(
                 width: double.infinity,
-                height: MediaQuery.of(context).size.height - 50 - TopAppBar().preferredSize.height,
+                height: MediaQuery.of(context).size.height -
+                    50 -
+                    TopAppBar().preferredSize.height,
                 margin: EdgeInsets.symmetric(horizontal: 8, vertical: 10),
                 child: Center(
                   child: Obx(
@@ -74,12 +75,11 @@ class Home extends StatelessWidget {
                           );
                         }
                         return GridView.count(
-                          crossAxisCount: 2,
-                          children: List.generate(
-                            snapshot.data.length, (index) => 
-                            _listProducts(context, snapshot.data[index])
-                          )
-                        );
+                            crossAxisCount: 2,
+                            children: List.generate(
+                                snapshot.data.length,
+                                (index) => _listProducts(
+                                    context, snapshot.data[index])));
                       },
                     ),
                   ),
@@ -132,8 +132,7 @@ class Home extends StatelessWidget {
 
   Widget _listProducts(BuildContext context, ProductModel product) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-      child: ProductThumb(product: product)
-    );
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+        child: ProductThumb(product: product));
   }
 }

@@ -19,134 +19,150 @@ class Login extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-            image: AssetImage("assets/images/background.png"),
-            colorFilter: ColorFilter.mode(
-                Colors.black.withOpacity(0.3), BlendMode.dstATop),
-            fit: BoxFit.fill),
+          image: AssetImage("assets/images/background.png"),
+          colorFilter: ColorFilter.mode(
+              Colors.black.withOpacity(0.3), BlendMode.dstATop),
+          fit: BoxFit.fill,
+        ),
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Form(
           key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              ListView(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                children: [
-                  SizedBox(
-                    height: 60,
+          child: SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints:
+                  BoxConstraints(minHeight: MediaQuery.of(context).size.height),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Column(
+                    children: [
+                      SizedBox(
+                        height: 60,
+                      ),
+                      Container(
+                        alignment: Alignment.topCenter,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Peppex.whh_foodtray,
+                              color: Colors.white,
+                              size: 45,
+                            ),
+                            SizedBox(
+                              height: 7.5,
+                            ),
+                            Text(
+                              'Peppex',
+                              style: Theme.of(context).textTheme.headline3,
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 60,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(53, 15, 53, 15),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            InputField(
+                              context: context,
+                              textHint: 'Correo electrónico',
+                              iconData: Peppex.carbon_email,
+                              isPassword: false,
+                              hasRadius: true,
+                              controller: authController.emailController,
+                              validator: Validator().email,
+                              onChanged: (value) => null,
+                              onSaved: (value) =>
+                                  authController.emailController.text = value,
+                            ),
+                            SizedBox(height: 30),
+                            InputField(
+                              context: context,
+                              textHint: 'Contraseña',
+                              iconData: Peppex.bi_lock_fill,
+                              isPassword: true,
+                              hasRadius: true,
+                              controller: authController.passwordController,
+                              validator: Validator().password,
+                              onChanged: (value) => null,
+                              onSaved: (value) => authController
+                                  .passwordController.text = value,
+                            ),
+                            SizedBox(height: 30),
+                            MainButton(
+                                buttonText: 'Ingresar',
+                                function: null,
+                                onPressed: () async {
+                                  if (_formKey.currentState.validate()) {
+                                    authController
+                                        .signInWithEmailAndPassword(context);
+                                  }
+                                }),
+                            SizedBox(height: 6),
+                            ElevatedButton.icon(
+                              onPressed: () async {
+                                authController.signInWithGoogle(context);
+                              },
+                              icon: Icon(
+                                FontAwesomeIcons.google,
+                                color: Colors.white,
+                                size: 16,
+                              ),
+                              label: Text(
+                                'Ingresar con Google',
+                                style: Theme.of(context).textTheme.subtitle2,
+                              ),
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                  Color.fromRGBO(253, 107, 96, 1),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                            TextButton(
+                              onPressed: () async {
+                                authController.signInAsGuest(context);
+                              },
+                              child: Text('Ingresar como invitado',
+                                  style: Theme.of(context).textTheme.subtitle2),
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                   Container(
-                    alignment: Alignment.topCenter,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Peppex.whh_foodtray,
-                            color: Colors.white, size: 45),
-                        SizedBox(height: 7.5),
-                        Text('Peppex',
-                            style: Theme.of(context).textTheme.headline3),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 60,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(53, 15, 53, 15),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        InputField(
-                          context: context,
-                          textHint: 'Correo electrónico',
-                          iconData: Peppex.carbon_email,
-                          isPassword: false,
-                          hasRadius: true,
-                          controller: authController.emailController,
-                          validator: Validator().email,
-                          onChanged: (value) => null,
-                          onSaved: (value) =>
-                              authController.emailController.text = value,
-                        ),
-                        SizedBox(height: 30),
-                        InputField(
-                          context: context,
-                          textHint: 'Contraseña',
-                          iconData: Peppex.bi_lock_fill,
-                          isPassword: true,
-                          hasRadius: true,
-                          controller: authController.passwordController,
-                          validator: Validator().password,
-                          onChanged: (value) => null,
-                          onSaved: (value) =>
-                              authController.passwordController.text = value,
-                        ),
-                        SizedBox(height: 30),
-                        MainButton(
-                            buttonText: 'Ingresar',
-                            function: null,
-                            onPressed: () async {
-                              if (_formKey.currentState.validate()) {
-                                authController
-                                    .signInWithEmailAndPassword(context);
-                              }
-                            }),
-                        SizedBox(height: 6),
-                        ElevatedButton.icon(
-                          onPressed: () async {
-                            authController.signInWithGoogle(context);
-                          },
-                          icon: Icon(
-                            FontAwesomeIcons.google,
-                            color: Colors.white,
-                            size: 16,
-                          ),
-                          label: Text(
-                            'Ingresar con Google',
+                    padding: const EdgeInsets.all(5.0),
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      alignment: Alignment.bottomCenter,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            '¿No tienes cuenta?',
                             style: Theme.of(context).textTheme.subtitle2,
                           ),
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                              Color.fromRGBO(253, 107, 96, 1),
-                            ),
+                          TextButton(
+                            onPressed: () => Get.to(Register()),
+                            child: Text('Regístrate',
+                                style: Theme.of(context).textTheme.bodyText2),
                           ),
-                        ),
-                        SizedBox(height: 8),
-                        TextButton(
-                          onPressed: () async {
-                            authController.signInAsGuest(context);
-                          },
-                          child: Text('Ingresar como invitado',
-                              style: Theme.of(context).textTheme.subtitle2),
-                        )
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ],
               ),
-              Container(
-                padding: const EdgeInsets.all(5.0),
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                  alignment: Alignment.bottomCenter,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('¿No tienes cuenta?',
-                          style: Theme.of(context).textTheme.subtitle2),
-                      TextButton(
-                        onPressed: () => Get.to(Register()),
-                        child: Text('Regístrate',
-                            style: Theme.of(context).textTheme.bodyText2),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ),

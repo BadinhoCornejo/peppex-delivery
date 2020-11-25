@@ -74,6 +74,16 @@ class _InputFieldState extends State<InputField> {
             color: Colors.transparent,
           ),
         ),
+        errorBorder: OutlineInputBorder(
+          borderSide: new BorderSide(
+            color: Colors.transparent,
+          ),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderSide: new BorderSide(
+            color: Colors.transparent,
+          ),
+        ),
         suffixIcon: widget.isPassword
             ? IconButton(
                 icon: _obscureText

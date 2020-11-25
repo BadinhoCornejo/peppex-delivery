@@ -53,6 +53,16 @@ class _InputFieldGenericState extends State<InputFieldGeneric> {
             color: Colors.transparent,
           ),
         ),
+        errorBorder: OutlineInputBorder(
+          borderSide: new BorderSide(
+            color: Colors.transparent,
+          ),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderSide: new BorderSide(
+            color: Colors.transparent,
+          ),
+        ),
       ),
     );
   }

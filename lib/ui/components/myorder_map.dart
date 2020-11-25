@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:peppex_delivery/constants/peppex_icons.dart';
 
 class MyOrderMap extends StatefulWidget {
   @override
@@ -100,15 +101,25 @@ class _MyOrderMapState extends State<MyOrderMap> {
     new LatLng(-8.139669837909947, -79.03803760044188)
   ];
 
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    mapController?.dispose();
+    super.dispose();
+  }
+
   void _onMapCreated(MapboxMapController controller) {
     mapController = controller;
     _onStyleLoaded();
-    _onLocationLoaded();
   }
 
   void _onStyleLoaded() {
-    addImageFromAsset("me", "assets/me.png");
-    addImageFromAsset("myorder", "assets/myorder.png");
+    addImageFromAsset("me", "assets/images/me.png");
+    addImageFromAsset("myorder", "assets/images/myorder.png");
     addImageFromUrl("networkImage", "https://via.placeholder.com/50");
   }
 
@@ -152,15 +163,134 @@ class _MyOrderMapState extends State<MyOrderMap> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Mi pedido',
+        ),
+      ),
       body: SafeArea(
-        child: MapboxMap(
-          onMapCreated: _onMapCreated,
-          styleString: streetsStyle,
-          initialCameraPosition: CameraPosition(
-            target: origin,
-            zoom: 14,
-            tilt: 50,
-          ),
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            MapboxMap(
+              onMapCreated: _onMapCreated,
+              onStyleLoadedCallback: _onLocationLoaded,
+              styleString: streetsStyle,
+              initialCameraPosition: CameraPosition(
+                target: origin,
+                zoom: 14,
+                tilt: 50,
+              ),
+            ),
+            Positioned.fill(
+              top: 8,
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: Container(
+                  width: 361,
+                  height: 120,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 4,
+                        blurRadius: 7,
+                        offset: Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 50,
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                width: 24,
+                                height: 24,
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).primaryColor,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Center(
+                                  child: Icon(
+                                    Peppex.whh_foodtray,
+                                    color: Colors.white,
+                                    size: 12,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 6,
+                              ),
+                              Icon(
+                                Icons.more_vert,
+                                color: Colors.black,
+                              ),
+                              SizedBox(
+                                height: 6,
+                              ),
+                              Container(
+                                width: 24,
+                                height: 24,
+                                decoration: BoxDecoration(
+                                  color: Colors.black,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Center(
+                                  child: Icon(
+                                    Icons.location_pin,
+                                    color: Colors.white,
+                                    size: 12,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 311,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              height: 24,
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  'Isaac Albeniz 316, Trujillo',
+                                  style: Theme.of(context).textTheme.headline4,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 36,
+                            ),
+                            Container(
+                              height: 24,
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  'H, Distrito de Víctor Larco Herrera 13009',
+                                  style: Theme.of(context).textTheme.headline4,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

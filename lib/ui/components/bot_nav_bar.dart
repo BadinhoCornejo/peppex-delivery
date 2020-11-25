@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:peppex_delivery/constants/peppex_icons.dart';
+import 'package:peppex_delivery/controllers/auth_controller.dart';
+import 'package:peppex_delivery/ui/components/myorder_map.dart';
 import 'package:peppex_delivery/ui/screens/home.dart';
 
-
 class BottomNavBar extends StatelessWidget {
-
+  final AuthController authController = Get.put(AuthController());
   final int currentIndex;
 
-  const BottomNavBar({
+  BottomNavBar({
     Key key,
     @required this.currentIndex,
   }) : super(key: key);
@@ -21,17 +22,11 @@ class BottomNavBar extends StatelessWidget {
         currentIndex: currentIndex < 0 ? 0 : currentIndex,
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Peppex.ic_twotone_menu_book),
-            label: 'Menú'
-          ),
+              icon: Icon(Peppex.ic_twotone_menu_book), label: 'Menú'),
           BottomNavigationBarItem(
-            icon: Icon(Peppex.whh_foodtray, size: 19),
-            label: 'Mi pedido'
-          ),
+              icon: Icon(Peppex.whh_foodtray, size: 19), label: 'Mi pedido'),
           BottomNavigationBarItem(
-            icon: Icon(Peppex.bytesize_user),
-            label: 'Mi cuenta'
-          )
+              icon: Icon(Peppex.bytesize_user), label: 'Mi cuenta')
         ],
         type: BottomNavigationBarType.fixed,
         selectedItemColor: currentIndex < 0
@@ -43,13 +38,12 @@ class BottomNavBar extends StatelessWidget {
               Get.to(Home());
               break;
             case 1:
+              Get.to(MyOrderMap());
               break;
             case 2:
+              authController.signOut();
               break;
           }
-        }
-    );
+        });
   }
-
-
 }

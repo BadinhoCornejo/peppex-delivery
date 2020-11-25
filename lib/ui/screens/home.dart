@@ -7,7 +7,6 @@ import 'package:peppex_delivery/ui/components/product.dart';
 import 'package:peppex_delivery/ui/components/top_app_bar.dart';
 
 class Home extends StatelessWidget {
-
   final AuthController authController = Get.put(AuthController());
   final CategoriesController categoriesController =
       Get.put(CategoriesController());
@@ -86,13 +85,6 @@ class Home extends StatelessWidget {
                 ),
               )
             ],
-          ),
-          floatingActionButton: FloatingActionButton(
-            child: Icon(Icons.add),
-            onPressed: () {
-              authController.signOut();
-            },
-            backgroundColor: Theme.of(context).buttonColor,
           ),
         ),
       );

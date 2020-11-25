@@ -15,9 +15,9 @@ class OrderController extends GetxController {
       List<String> products = cartItems.map((e) => e.productReference).toList();
 
       if (_fieldsEmpty(customerName, customerDoc, address, products))
-        throw new StateError('Campos incompletos');
+        return false;
 
-      if (!_isAmountValid(amount)) throw new StateError('Monto no válido');
+      if (!_isAmountValid(amount)) return false;
 
       OrderModel order = new OrderModel(
         uid: '',
@@ -32,7 +32,7 @@ class OrderController extends GetxController {
       await userDoc.collection('orders').add(order.toJson());
       return true;
     } catch (e) {
-      throw new StateError(e.message);
+      return false;
     }
   }
 
@@ -42,12 +42,9 @@ class OrderController extends GetxController {
       num amount = 0;
 
       cartItems.forEach((element) {
-        if (!_isPriceValid(element.product.price))
-          throw new StateError('El precio debe ser mayor o igual a 1');
+        if (!_isPriceValid(element.product.price)) return 0;
 
-        if (!_isQuantityValid(element.quantity))
-          throw new StateError(
-              'La cantidad no debe superar las 4 unidades o debe ser mayor o igual a 1');
+        if (!_isQuantityValid(element.quantity)) return 0;
 
         amount = amount + (element.product.price * element.quantity);
       });

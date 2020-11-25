@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:peppex_delivery/models/models.dart';
+import 'package:peppex_delivery/ui/screens/cart.dart';
 
 class CartController extends GetxController {
   static CartController to = Get.find();
@@ -24,7 +25,7 @@ class CartController extends GetxController {
           .where('productRef', isEqualTo: product.uid)
           .get();
 
-      if (res.isNull && product.status == 1) {
+      if (res.docs.length == 0 && product.status == 1) {
         CartItemModel cartItem = new CartItemModel(
           uid: '',
           product: product,
@@ -39,7 +40,7 @@ class CartController extends GetxController {
           icon: Icon(Icons.check_circle),
           shouldIconPulse: true,
           onTap: (_) {
-            // Get.to(Cart());
+             Get.to(Cart());
           },
           snackPosition: SnackPosition.BOTTOM,
           duration: Duration(seconds: 10),
@@ -48,6 +49,7 @@ class CartController extends GetxController {
         );
       } else if (product.status == 1) {
         CartItemModel cartItem = CartItemModel.fromMap(res.docs[0]);
+
         add(userDoc, cartItem);
         Get.snackbar(
           '¡Te gusta mucho este producto!',
@@ -67,7 +69,7 @@ class CartController extends GetxController {
         );
       } else {
         Get.snackbar(
-          'Lo sentimos. Este producto no está dispnible',
+          'Lo sentimos. Este producto no está disponible',
           'Aún tenemos preparados deliciosos platillos :)',
           icon: Icon(Icons.info_outline),
           snackPosition: SnackPosition.BOTTOM,
@@ -133,6 +135,7 @@ class CartController extends GetxController {
   }
 
   _updateCartItem(DocumentReference userDoc, CartItemModel cartItem) async {
+    cartItem.product.uid = cartItem.productReference;
     await userDoc.collection('cart').doc(cartItem.uid).set(cartItem.toJson());
   }
 

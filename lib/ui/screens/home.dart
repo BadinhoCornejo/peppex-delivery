@@ -88,8 +88,7 @@ class Home extends StatelessWidget {
           floatingActionButton: FloatingActionButton(
             child: Icon(Icons.add),
             onPressed: () {
-              // authController.signOut();
-              Get.to(Checkout());
+              authController.signOut();
             },
             backgroundColor: Theme.of(context).buttonColor,
           ),

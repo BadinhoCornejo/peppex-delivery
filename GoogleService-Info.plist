@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>747461912807-vnb5u3h73sk9g7oig3k11meidmtkto33.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.747461912807-vnb5u3h73sk9g7oig3k11meidmtkto33</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>747461912807-thq80vqs5l0bou2804ra9t9bbr9qcluv.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCE3DpTGSxtDNGA6GT4w3cqh82fDCRxDLw</string>
+	<key>GCM_SENDER_ID</key>
+	<string>747461912807</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.peppexDelivery</string>
+	<key>PROJECT_ID</key>
+	<string>peppex-delivery-service</string>
+	<key>STORAGE_BUCKET</key>
+	<string>peppex-delivery-service.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:747461912807:ios:0da5d386fe4d62dd48da42</string>
+	<key>DATABASE_URL</key>
+	<string>https://peppex-delivery-service.firebaseio.com</string>
+</dict>
+</plist>

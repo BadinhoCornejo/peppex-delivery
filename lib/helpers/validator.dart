@@ -27,10 +27,17 @@ class Validator {
   }
 
   String notEmpty(String value) {
-    Pattern pattern = r'^\S+$';
+    if (value.length == 0)
+      return 'Por favor, ingrese algo';
+    else
+      return null;
+  }
+
+  String dni(String value) {
+    Pattern pattern = r'^\d{8}$';
     RegExp regex = new RegExp(pattern);
     if (!regex.hasMatch(value))
-      return 'Por favor, ingrese algo';
+      return 'Por favor, ingrese un DNI válido';
     else
       return null;
   }

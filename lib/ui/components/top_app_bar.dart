@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:peppex_delivery/constants/peppex_icons.dart';
+import 'package:peppex_delivery/ui/screens/cart.dart';
 
 class TopAppBar extends StatelessWidget with PreferredSizeWidget {
   final String appBarText;
@@ -19,7 +21,9 @@ class TopAppBar extends StatelessWidget with PreferredSizeWidget {
           }),
       IconButton(
         icon: Icon(Peppex.ant_design_shopping_cart_outlined),
-        onPressed: () {},
+        onPressed: () {
+          Get.to(Cart());
+        },
       ),
       IconButton(icon: Icon(Peppex.bytesize_filter), onPressed: () {})
     ]);

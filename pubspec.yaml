@@ -23,12 +23,18 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  font_awesome_flutter: ^8.8.1
+  http: ^0.12.2
   # Firebase
   firebase_core: ^0.5.0+1
   firebase_auth: ^0.18.1+2
   cloud_firestore: ^0.14.1+3
   google_sign_in: ^4.5.4
-  font_awesome_flutter: ^8.8.1
+  # Testing
+  cloud_firestore_mocks: ^0.5.2
+  # Mapbox
+  mapbox_gl: ^0.9.0
+  
 
 
 

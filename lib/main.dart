@@ -12,5 +12,7 @@ void main() async {
   await GetStorage.init();
   Get.put<AuthController>(AuthController());
   Get.put<CategoriesController>(CategoriesController());
+  Get.put<OrderController>(OrderController());
+  Get.put<CartController>(CartController());
   runApp(App());
 }

@@ -10,9 +10,9 @@ import 'package:peppex_delivery/ui/components/myorder_map.dart';
 import 'package:peppex_delivery/ui/components/top_app_bar.dart';
 
 class Checkout extends StatelessWidget {
-  final AuthController authController = Get.put(AuthController());
-  final OrderController orderController = Get.put(OrderController());
-  final CartController cartController = Get.put(CartController());
+  final AuthController authController = AuthController.to;
+  final OrderController orderController = OrderController.to;
+  final CartController cartController = CartController.to;
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -114,15 +114,12 @@ class Checkout extends StatelessWidget {
                                 color: Colors.green,
                               ),
                               shouldIconPulse: true,
-                              onTap: (_) {
-                                // Get.to(MyOrderMap());
-                              },
                               snackPosition: SnackPosition.BOTTOM,
                               duration: Duration(seconds: 10),
                               backgroundColor: Theme.of(context).primaryColor,
                               colorText: Colors.white,
                             );
-                            Get.to(MyOrderMap());
+                            Get.offAll(MyOrderMap());
                           } else {
                             Get.snackbar(
                               'No se pudo generar la orden',

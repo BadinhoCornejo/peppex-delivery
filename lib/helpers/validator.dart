@@ -27,9 +27,7 @@ class Validator {
   }
 
   String notEmpty(String value) {
-    Pattern pattern = r'^\S+$';
-    RegExp regex = new RegExp(pattern);
-    if (!regex.hasMatch(value))
+    if (value.length == 0)
       return 'Por favor, ingrese algo';
     else
       return null;

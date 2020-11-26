@@ -1,10 +1,12 @@
 import 'dart:typed_data';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:peppex_delivery/constants/peppex_icons.dart';
+import 'package:peppex_delivery/ui/screens/home.dart';
 
 class MyOrderMap extends StatefulWidget {
   @override
@@ -167,6 +169,11 @@ class _MyOrderMapState extends State<MyOrderMap> {
         title: Text(
           'Mi pedido',
         ),
+        leading: IconButton(
+            icon: Icon(Icons.arrow_back_ios),
+            onPressed: () {
+              Get.off(Home());
+            }),
       ),
       body: SafeArea(
         child: Stack(

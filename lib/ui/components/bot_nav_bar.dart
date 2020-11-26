@@ -38,7 +38,7 @@ class BottomNavBar extends StatelessWidget {
               Get.to(Home());
               break;
             case 1:
-              Get.to(MyOrderMap());
+              Get.offAll(MyOrderMap());
               break;
             case 2:
               authController.signOut();

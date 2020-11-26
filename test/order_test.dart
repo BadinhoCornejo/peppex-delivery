@@ -129,10 +129,7 @@ main() {
 
       await cartController.newProduct(userDoc, cartItems[0]);
 
-      orderController.calcAmount(userDoc).catchError((e) {
-        expect(e.message,
-            'La cantidad no debe superar las 4 unidades o debe ser mayor o igual a 1');
-      });
+      expect(await orderController.calcAmount(userDoc), 0);
     });
     test('Calculate amount fails 2', () async {
       const userUid = '4';
@@ -172,10 +169,7 @@ main() {
 
       await cartController.newProduct(userDoc, cartItems[0]);
 
-      orderController.calcAmount(userDoc).catchError((e) {
-        expect(e.message,
-            'La cantidad no debe superar las 4 unidades o debe ser mayor o igual a 1');
-      });
+      expect(await orderController.calcAmount(userDoc), 0);
     });
     test('Calculate amount fails 3', () async {
       const userUid = '5';
@@ -215,10 +209,7 @@ main() {
 
       await cartController.newProduct(userDoc, cartItems[0]);
 
-      orderController.calcAmount(userDoc).catchError((e) {
-        expect(e.message,
-            'La cantidad no debe superar las 4 unidades o debe ser mayor o igual a 1');
-      });
+      expect(await orderController.calcAmount(userDoc), 0);
     });
     test('Calculate amount fails 4', () async {
       const userUid = '6';
@@ -258,10 +249,7 @@ main() {
 
       await cartController.newProduct(userDoc, cartItems[0]);
 
-      orderController.calcAmount(userDoc).catchError((e) {
-        expect(e.message,
-            'La cantidad no debe superar las 4 unidades o debe ser mayor o igual a 1');
-      });
+      expect(await orderController.calcAmount(userDoc), 0);
     });
     test('Calculate amount fails 5', () async {
       const userUid = '7';
@@ -301,9 +289,7 @@ main() {
 
       await cartController.newProduct(userDoc, cartItems[0]);
 
-      orderController.calcAmount(userDoc).catchError((e) {
-        expect(e.message, 'El precio debe ser mayor o igual a 1');
-      });
+      expect(await orderController.calcAmount(userDoc), 0);
     });
     test('Calculate amount fails 7', () async {
       const userUid = '8';
@@ -343,9 +329,7 @@ main() {
 
       await cartController.newProduct(userDoc, cartItems[0]);
 
-      orderController.calcAmount(userDoc).catchError((e) {
-        expect(e.message, 'El precio debe ser mayor o igual a 1');
-      });
+      expect(await orderController.calcAmount(userDoc), 0);
     });
     // ORDER CREATION
     test('Create order success 1', () async {
@@ -487,11 +471,10 @@ main() {
       String address = 'Primavera';
       num amount = await orderController.calcAmount(userDoc);
 
-      await orderController
-          .newOrder(userDoc, customerName, customerDoc, address, amount)
-          .catchError((e) {
-        expect(e.message, 'Monto no válido');
-      });
+      expect(
+          await orderController.newOrder(
+              userDoc, customerName, customerDoc, address, amount),
+          false);
     });
     test('Create order fails 2', () async {
       const userUid = '12';
@@ -536,11 +519,10 @@ main() {
       String address = 'Primavera';
       num amount = await orderController.calcAmount(userDoc);
 
-      await orderController
-          .newOrder(userDoc, customerName, customerDoc, address, amount)
-          .catchError((e) {
-        expect(e.message, 'Monto no válido');
-      });
+      expect(
+          await orderController.newOrder(
+              userDoc, customerName, customerDoc, address, amount),
+          false);
     });
     test('Create order fails 3', () async {
       const userUid = '13';
@@ -585,11 +567,10 @@ main() {
       String address = '';
       num amount = await orderController.calcAmount(userDoc);
 
-      await orderController
-          .newOrder(userDoc, customerName, customerDoc, address, amount)
-          .catchError((e) {
-        expect(e.message, 'Campos incompletos');
-      });
+      expect(
+          await orderController.newOrder(
+              userDoc, customerName, customerDoc, address, amount),
+          false);
     });
   });
 }

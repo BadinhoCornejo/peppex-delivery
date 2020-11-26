@@ -7,9 +7,8 @@ import 'package:peppex_delivery/ui/components/product.dart';
 import 'package:peppex_delivery/ui/components/top_app_bar.dart';
 
 class Home extends StatelessWidget {
-  final AuthController authController = Get.put(AuthController());
-  final CategoriesController categoriesController =
-      Get.put(CategoriesController());
+  final AuthController authController = AuthController.to;
+  final CategoriesController categoriesController = CategoriesController.to;
 
   @override
   Widget build(BuildContext context) => SafeArea(

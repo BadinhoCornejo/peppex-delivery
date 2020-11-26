@@ -9,6 +9,16 @@ import 'package:peppex_delivery/ui/screens/cart.dart';
 class CartController extends GetxController {
   static CartController to = Get.find();
 
+  num calcAmount(List<CartItemModel> cartItems) {
+    num amount = 0;
+
+    cartItems.forEach((element) {
+      amount = amount + (element.product.price * element.quantity);
+    });
+
+    return amount;
+  }
+
   Stream<List<CartItemModel>> listCart(DocumentReference userDoc) {
     return userDoc.collection('cart').snapshots().map((QuerySnapshot query) =>
         query.docs.map((e) => CartItemModel.fromMap(e)).toList());
@@ -40,7 +50,7 @@ class CartController extends GetxController {
           icon: Icon(Icons.check_circle),
           shouldIconPulse: true,
           onTap: (_) {
-             Get.to(Cart());
+            Get.to(Cart());
           },
           snackPosition: SnackPosition.BOTTOM,
           duration: Duration(seconds: 10),
@@ -129,9 +139,29 @@ class CartController extends GetxController {
     }
   }
 
+  remove(DocumentReference userDoc, CartItemModel cartItem) async {
+    try {
+      await userDoc.collection('cart').doc(cartItem.uid).delete();
+    } catch (e) {
+      Get.snackbar(
+        '¡Ups! Hubo un error al quitar este producto',
+        'Por favor, intente nuevamente.',
+        icon: Icon(Icons.error_outline),
+        snackPosition: SnackPosition.BOTTOM,
+        duration: Duration(seconds: 10),
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
+  }
+
   cleanCart(DocumentReference userDoc) {
-    userDoc.collection('cart').snapshots().forEach((res) => res.docs.forEach(
-        (e) async => await userDoc.collection('cart').doc(e.id).delete()));
+    userDoc
+        .collection('cart')
+        .snapshots()
+        .takeWhile((element) => element.docs.length != 0)
+        .forEach((res) => res.docs.forEach(
+            (e) async => await userDoc.collection('cart').doc(e.id).delete()));
   }
 
   _updateCartItem(DocumentReference userDoc, CartItemModel cartItem) async {

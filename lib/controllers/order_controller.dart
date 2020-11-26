@@ -11,11 +11,11 @@ class OrderController extends GetxController {
   Future<bool> newOrder(DocumentReference userDoc, String customerName,
       String customerDoc, String address, num amount) async {
     try {
+      print(customerDoc + ' ' + address + ' ' + customerName);
       List<CartItemModel> cartItems = await getCartItems(userDoc);
       List<String> products = cartItems.map((e) => e.productReference).toList();
 
-      if (_fieldsEmpty(customerName, customerDoc, address, products))
-        return false;
+      if (_fieldsEmpty(customerName, customerDoc, address)) return false;
 
       if (!_isAmountValid(amount)) return false;
 
@@ -65,12 +65,10 @@ class OrderController extends GetxController {
     return amount >= 25 && amount <= 125;
   }
 
-  bool _fieldsEmpty(String customerName, String customerDoc, String address,
-      List<String> products) {
+  bool _fieldsEmpty(String customerName, String customerDoc, String address) {
     return customerName.length == 0 ||
         customerDoc.length == 0 ||
-        address.length == 0 ||
-        products.length == 0;
+        address.length == 0;
   }
 
   bool _isPriceValid(num price) {

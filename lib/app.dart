@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:peppex_delivery/constants/app_routes.dart';
 import 'package:peppex_delivery/constants/app_theme.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:peppex_delivery/helpers/root.dart';
 
 class App extends StatelessWidget {
   @override
@@ -11,7 +12,7 @@ class App extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       theme: appTheme(),
-      initialRoute: "/",
+      home: Root(),
       getPages: AppRoutes.routes,
     );
   }

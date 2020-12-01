@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
@@ -8,21 +9,64 @@ import 'package:peppex_delivery/models/models.dart';
 class OrderController extends GetxController {
   static OrderController to = Get.find();
 
-  Future<bool> newOrder(DocumentReference userDoc, String customerName,
-      String customerDoc, String address, num amount) async {
+  Future<bool> newOrder(
+      DocumentReference userDoc,
+      String customerName,
+      String customerDoc,
+      String customerPhone,
+      String address,
+      num amount) async {
     try {
-      print(customerDoc + ' ' + address + ' ' + customerName);
       List<CartItemModel> cartItems = await getCartItems(userDoc);
       List<String> products = cartItems.map((e) => e.productReference).toList();
 
-      if (_fieldsEmpty(customerName, customerDoc, address)) return false;
+      if (_isFieldsEmpty(customerName, customerDoc, customerPhone, address)) {
+        Get.snackbar(
+          'No se pudo generar la orden',
+          'Por favor, completar todos los campos.',
+          icon: Icon(Icons.error_outline),
+          snackPosition: SnackPosition.BOTTOM,
+          duration: Duration(seconds: 10),
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+        return false;
+      }
 
-      if (!_isAmountValid(amount)) return false;
+      if (!_isAmountValid(amount)) {
+        Get.snackbar(
+          'No se pudo generar la orden',
+          'Considere un monto entre S/ 25 y S/ 125.',
+          icon: Icon(Icons.error_outline),
+          snackPosition: SnackPosition.BOTTOM,
+          duration: Duration(seconds: 10),
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+        return false;
+      }
+
+      var activeOrder = await getActiveOrder(userDoc);
+
+      if (activeOrder != null) {
+        Get.snackbar(
+          'No se pudo generar la orden',
+          'Al parecer ya has realizado un pedido.',
+          icon: Icon(Icons.error_outline),
+          snackPosition: SnackPosition.BOTTOM,
+          duration: Duration(seconds: 10),
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+        return false;
+      }
 
       OrderModel order = new OrderModel(
         uid: '',
         customerName: customerName,
         customerDoc: customerDoc,
+        customerPhone: customerPhone,
+        active: 1,
         address: address,
         orderDate: new DateTime.now(),
         amount: amount,
@@ -34,6 +78,24 @@ class OrderController extends GetxController {
     } catch (e) {
       return false;
     }
+  }
+
+  Future<OrderModel> getActiveOrder(DocumentReference userDoc) async {
+    QuerySnapshot res =
+        await userDoc.collection('orders').where('active', isEqualTo: 1).get();
+
+    if (res.docs.length == 0) return null;
+
+    return new OrderModel.fromMap(res.docs[0]);
+  }
+
+  Future<OrderModel> getDeliveredOrder(DocumentReference userDoc) async {
+    QuerySnapshot res =
+        await userDoc.collection('orders').where('active', isEqualTo: 2).get();
+
+    if (res.docs.length == 0) return null;
+
+    return new OrderModel.fromMap(res.docs[0]);
   }
 
   Future<num> calcAmount(DocumentReference userDoc) async {
@@ -65,9 +127,11 @@ class OrderController extends GetxController {
     return amount >= 25 && amount <= 125;
   }
 
-  bool _fieldsEmpty(String customerName, String customerDoc, String address) {
+  bool _isFieldsEmpty(String customerName, String customerDoc,
+      String customerPhone, String address) {
     return customerName.length == 0 ||
         customerDoc.length == 0 ||
+        customerPhone.length == 0 ||
         address.length == 0;
   }
 

@@ -41,4 +41,13 @@ class Validator {
     else
       return null;
   }
+
+  String phone(String value) {
+    Pattern pattern = r'^\d{9}$';
+    RegExp regex = new RegExp(pattern);
+    if (!regex.hasMatch(value))
+      return 'Por favor, ingrese número de teléfono válido';
+    else
+      return null;
+  }
 }

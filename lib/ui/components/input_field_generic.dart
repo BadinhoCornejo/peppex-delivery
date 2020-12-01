@@ -4,6 +4,7 @@ class InputFieldGeneric extends StatefulWidget {
   final BuildContext context;
   final String textHint;
   final bool hasRadius;
+  final TextInputType keyboardType;
   final TextEditingController controller;
   final Function(String) validator;
   final Function(String) onChanged;
@@ -13,6 +14,7 @@ class InputFieldGeneric extends StatefulWidget {
     Key key,
     @required this.validator,
     @required this.controller,
+    @required this.keyboardType,
     @required this.context,
     @required this.textHint,
     @required this.hasRadius,
@@ -28,6 +30,7 @@ class _InputFieldGenericState extends State<InputFieldGeneric> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      keyboardType: widget.keyboardType,
       controller: widget.controller,
       validator: widget.validator,
       onChanged: widget.onChanged,

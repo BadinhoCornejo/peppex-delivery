@@ -1,12 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:peppex_delivery/controllers/controllers.dart';
 import 'package:peppex_delivery/models/models.dart';
 
 class ProductThumb extends StatelessWidget {
   final ProductModel product;
-  final AuthController authController = AuthController.to;
   final CartController cartController = CartController.to;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
   ProductThumb({Key key, @required this.product}) : super(key: key);
@@ -54,7 +55,7 @@ class ProductThumb extends StatelessWidget {
                               product.name);
                           print('Status: ' + product.status.toString());
                           String userUid =
-                              authController.userSnapshot.value.uid;
+                              _auth.currentUser.uid;
                           DocumentReference userDoc =
                               _db.collection('users').doc(userUid);
                           this.cartController.addProduct(

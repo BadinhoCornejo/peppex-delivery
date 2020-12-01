@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -6,17 +7,18 @@ import 'package:peppex_delivery/controllers/controllers.dart';
 import 'package:peppex_delivery/helpers/helpers.dart';
 import 'package:peppex_delivery/ui/components/components.dart';
 import 'package:peppex_delivery/ui/components/input_field_generic.dart';
-import 'package:peppex_delivery/ui/components/myorder_map.dart';
 import 'package:peppex_delivery/ui/components/top_app_bar.dart';
+import 'package:peppex_delivery/ui/screens/map.dart';
 
 class Checkout extends StatelessWidget {
-  final AuthController authController = AuthController.to;
   final OrderController orderController = OrderController.to;
   final CartController cartController = CartController.to;
   final FirebaseFirestore _db = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController nameController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
   final TextEditingController dniController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
 
@@ -34,51 +36,84 @@ class Checkout extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.max,
               children: [
-                Column(
-                  children: [
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Container(
-                      padding: EdgeInsets.only(left: 8),
-                      child: InputFieldGeneric(
-                        validator: Validator().name,
-                        controller: nameController,
-                        context: context,
-                        textHint: 'Nombres y apellidos',
-                        hasRadius: false,
-                        onChanged: (value) => null,
-                        onSaved: (value) => nameController.text = value,
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.8,
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 20,
                       ),
-                    ),
-                    Divider(),
-                    Container(
-                      padding: EdgeInsets.only(left: 8),
-                      child: InputFieldGeneric(
-                        validator: Validator().dni,
-                        controller: dniController,
-                        context: context,
-                        textHint: 'Número de DNI',
-                        hasRadius: false,
-                        onChanged: (value) => null,
-                        onSaved: (value) => dniController.text = value,
+                      Container(
+                        padding: EdgeInsets.only(left: 8),
+                        child: InputFieldGeneric(
+                          keyboardType: TextInputType.name,
+                          validator: Validator().name,
+                          controller: nameController,
+                          context: context,
+                          textHint: 'Nombres y apellidos',
+                          hasRadius: false,
+                          onChanged: (value) => null,
+                          onSaved: (value) => nameController.text = value,
+                        ),
                       ),
-                    ),
-                    Divider(),
-                    Container(
-                      padding: EdgeInsets.only(left: 8),
-                      child: InputFieldGeneric(
-                        validator: Validator().notEmpty,
-                        controller: addressController,
-                        context: context,
-                        textHint: 'Dirección de entrega',
-                        hasRadius: false,
-                        onChanged: (value) => null,
-                        onSaved: (value) => addressController.text = value,
+                      Divider(),
+                      Container(
+                        padding: EdgeInsets.only(left: 8),
+                        child: InputFieldGeneric(
+                          keyboardType: TextInputType.number,
+                          validator: Validator().dni,
+                          controller: dniController,
+                          context: context,
+                          textHint: 'Número de DNI',
+                          hasRadius: false,
+                          onChanged: (value) => null,
+                          onSaved: (value) => dniController.text = value,
+                        ),
                       ),
-                    ),
-                    Divider(),
-                  ],
+                      Divider(),
+                      Container(
+                        padding: EdgeInsets.only(left: 8),
+                        child: InputFieldGeneric(
+                          keyboardType: TextInputType.phone,
+                          validator: Validator().phone,
+                          controller: phoneController,
+                          context: context,
+                          textHint: 'Número de teléfono',
+                          hasRadius: false,
+                          onChanged: (value) => null,
+                          onSaved: (value) => phoneController.text = value,
+                        ),
+                      ),
+                      Divider(),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Container(
+                              padding: EdgeInsets.only(left: 8),
+                              child: InputFieldGeneric(
+                                keyboardType: TextInputType.streetAddress,
+                                validator: Validator().notEmpty,
+                                controller: addressController,
+                                context: context,
+                                textHint: 'Dirección de entrega',
+                                hasRadius: false,
+                                onChanged: (value) => null,
+                                onSaved: (value) =>
+                                    addressController.text = value,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            width: 120,
+                            padding: EdgeInsets.only(right: 16),
+                            alignment: Alignment.centerRight,
+                            child: Text('Trujillo, Perú'),
+                          ),
+                        ],
+                      ),
+                      Divider(),
+                    ],
+                  ),
                 ),
                 Align(
                   alignment: Alignment.bottomCenter,
@@ -91,8 +126,7 @@ class Checkout extends StatelessWidget {
                         if (_formKey.currentState.validate()) {
                           SystemChannels.textInput.invokeMethod(
                               'TextInput.hide'); //to hide the keyboard - if any
-                          String userUid =
-                              authController.userSnapshot.value.uid;
+                          String userUid = _auth.currentUser.uid;
                           DocumentReference userDoc =
                               _db.collection('users').doc(userUid);
                           num amount =
@@ -101,6 +135,7 @@ class Checkout extends StatelessWidget {
                               userDoc,
                               nameController.text,
                               dniController.text,
+                              phoneController.text,
                               addressController.text,
                               amount);
                           print(res);
@@ -119,17 +154,7 @@ class Checkout extends StatelessWidget {
                               backgroundColor: Theme.of(context).primaryColor,
                               colorText: Colors.white,
                             );
-                            Get.offAll(MyOrderMap());
-                          } else {
-                            Get.snackbar(
-                              'No se pudo generar la orden',
-                              'Por favor, completar todos los campos.',
-                              icon: Icon(Icons.error_outline),
-                              snackPosition: SnackPosition.BOTTOM,
-                              duration: Duration(seconds: 10),
-                              backgroundColor: Colors.red,
-                              colorText: Colors.white,
-                            );
+                            Get.offAll(MapPage());
                           }
                         }
                       },

@@ -7,7 +7,6 @@ import 'package:peppex_delivery/ui/components/product.dart';
 import 'package:peppex_delivery/ui/components/top_app_bar.dart';
 
 class Home extends StatelessWidget {
-  final AuthController authController = AuthController.to;
   final CategoriesController categoriesController = CategoriesController.to;
 
   @override
@@ -73,11 +72,13 @@ class Home extends StatelessWidget {
                           );
                         }
                         return GridView.count(
-                            crossAxisCount: 2,
-                            children: List.generate(
-                                snapshot.data.length,
-                                (index) => _listProducts(
-                                    context, snapshot.data[index])));
+                          crossAxisCount: 2,
+                          children: List.generate(
+                            snapshot.data.length,
+                            (index) =>
+                                _listProducts(context, snapshot.data[index]),
+                          ),
+                        );
                       },
                     ),
                   ),
@@ -123,7 +124,8 @@ class Home extends StatelessWidget {
 
   Widget _listProducts(BuildContext context, ProductModel product) {
     return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-        child: ProductThumb(product: product));
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+      child: ProductThumb(product: product),
+    );
   }
 }

@@ -7,8 +7,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import 'package:peppex_delivery/models/models.dart';
-import 'package:peppex_delivery/ui/screens/screens.dart';
-import 'package:peppex_delivery/ui/auth/auth.dart';
 
 class AuthController extends GetxController {
   static AuthController to = Get.find();
@@ -20,16 +18,11 @@ class AuthController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseFirestore _db = FirebaseFirestore.instance;
-  Rx<User> userSnapshot = Rx<User>();
-  Rx<UserModel> userModel = Rx<UserModel>();
+  Rx<User> _user = Rx<User>();
 
   @override
-  void onReady() async {
-    //run every time auth state changes
-    ever(userSnapshot, handleAuthChanged);
-    userSnapshot.value = await getUser;
-    userSnapshot.bindStream(user);
-    super.onInit();
+  void onInit() {
+    _user.bindStream(_auth.authStateChanges());
   }
 
   @override
@@ -40,40 +33,9 @@ class AuthController extends GetxController {
     super.onClose();
   }
 
-  handleAuthChanged(_userSnapshot) async {
-    if (_userSnapshot?.uid != null) {
-      userModel.bindStream(streamFirestoreUser());
-    }
-
-    if (_userSnapshot == null) {
-      Get.offAll(Login());
-    } else {
-      Get.offAll(Home());
-    }
-  }
+  String get user => _user.value?.uid;
 
   Future<User> get getUser async => _auth.currentUser;
-
-  Stream<User> get user => _auth.authStateChanges();
-
-  Stream<UserModel> streamFirestoreUser() {
-    if (userSnapshot?.value?.uid != null) {
-      return _db
-          .doc('/users/${userSnapshot.value.uid}')
-          .snapshots()
-          .map((snapshot) => UserModel.fromMap(snapshot.data()));
-    }
-
-    return null;
-  }
-
-  Future<UserModel> getFirestoreUser() {
-    if (userSnapshot?.value?.uid != null) {
-      return _db.doc('/users/${userSnapshot.value.uid}').get().then(
-          (documentSnapshot) => UserModel.fromMap(documentSnapshot.data()));
-    }
-    return null;
-  }
 
   signInWithEmailAndPassword(BuildContext context) async {
     try {

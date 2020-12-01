@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:peppex_delivery/controllers/auth_controller.dart';
@@ -6,8 +7,8 @@ import 'package:peppex_delivery/controllers/cart_controller.dart';
 import 'package:peppex_delivery/models/models.dart';
 
 class CartItem extends StatelessWidget {
-  final AuthController authController = AuthController.to;
   final CartController cartController = CartController.to;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   final CartItemModel cartItem;
 
@@ -72,7 +73,7 @@ class CartItem extends StatelessWidget {
                                 color: Colors.black, size: 16),
                             onPressed: () {
                               String userUid =
-                                  authController.userSnapshot.value.uid;
+                                  _auth.currentUser.uid;
                               DocumentReference userDoc =
                                   _db.collection('users').doc(userUid);
                               cartController.quit(userDoc, cartItem);
@@ -85,7 +86,7 @@ class CartItem extends StatelessWidget {
                                 Icon(Icons.add, color: Colors.black, size: 16),
                             onPressed: () {
                               String userUid =
-                                  authController.userSnapshot.value.uid;
+                                  _auth.currentUser.uid;
                               DocumentReference userDoc =
                                   _db.collection('users').doc(userUid);
                               cartController.add(userDoc, cartItem);
@@ -106,7 +107,7 @@ class CartItem extends StatelessWidget {
                         child: Icon(Icons.close, color: Colors.black, size: 16),
                         onPressed: () {
                           String userUid =
-                              authController.userSnapshot.value.uid;
+                              _auth.currentUser.uid;
                           DocumentReference userDoc =
                               _db.collection('users').doc(userUid);
                           cartController.remove(userDoc, cartItem);

@@ -85,6 +85,91 @@ class Checkout extends StatelessWidget {
                         ),
                       ),
                       Divider(),
+                      Container(
+                        padding: EdgeInsets.only(left: 8),
+                        child: InputFieldGeneric(
+                          keyboardType: TextInputType.emailAddress,
+                          validator: Validator().email,
+                          controller: orderController.emailController,
+                          context: context,
+                          textHint: 'Correo electrónico',
+                          hasRadius: false,
+                          onChanged: (value) => null,
+                          onSaved: (value) =>
+                              orderController.emailController.text = value,
+                        ),
+                      ),
+                      Divider(),
+                      Container(
+                        padding: EdgeInsets.only(left: 8),
+                        child: InputFieldGeneric(
+                          keyboardType: TextInputType.number,
+                          validator: Validator().notEmpty,
+                          controller: orderController.cardController,
+                          context: context,
+                          textHint: 'Número de tarjeta',
+                          hasRadius: false,
+                          onChanged: (value) => null,
+                          onSaved: (value) =>
+                              orderController.cardController.text = value,
+                        ),
+                      ),
+                      Divider(),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Container(
+                              padding: EdgeInsets.only(left: 8),
+                              child: InputFieldGeneric(
+                                keyboardType: TextInputType.number,
+                                validator: Validator().notEmpty,
+                                controller:
+                                    orderController.expirationMonthController,
+                                context: context,
+                                textHint: 'MM',
+                                hasRadius: false,
+                                onChanged: (value) => null,
+                                onSaved: (value) => orderController
+                                    .expirationMonthController.text = value,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Container(
+                              padding: EdgeInsets.only(left: 8),
+                              child: InputFieldGeneric(
+                                keyboardType: TextInputType.number,
+                                validator: Validator().notEmpty,
+                                controller:
+                                    orderController.expirationYearController,
+                                context: context,
+                                textHint: 'YY',
+                                hasRadius: false,
+                                onChanged: (value) => null,
+                                onSaved: (value) => orderController
+                                    .expirationYearController.text = value,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Container(
+                              padding: EdgeInsets.only(left: 8),
+                              child: InputFieldGeneric(
+                                keyboardType: TextInputType.number,
+                                validator: Validator().notEmpty,
+                                controller: orderController.cvvController,
+                                context: context,
+                                textHint: 'CVV',
+                                hasRadius: false,
+                                onChanged: (value) => null,
+                                onSaved: (value) =>
+                                    orderController.cvvController.text = value,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Divider(),
                       Row(
                         children: [
                           Expanded(
@@ -138,7 +223,7 @@ class Checkout extends StatelessWidget {
                               phoneController.text,
                               addressController.text,
                               amount);
-                          print(res);
+                          print('ORDER --> $res');
                           if (res) {
                             cartController.cleanCart(userDoc);
                             Get.snackbar(

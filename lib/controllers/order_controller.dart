@@ -1,3 +1,4 @@
+import 'package:culqi_flutter/culqi_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -8,6 +9,14 @@ import 'package:peppex_delivery/models/models.dart';
 
 class OrderController extends GetxController {
   static OrderController to = Get.find();
+
+  final TextEditingController cardController = TextEditingController();
+  final TextEditingController expirationMonthController =
+      TextEditingController();
+  final TextEditingController expirationYearController =
+      TextEditingController();
+  final TextEditingController cvvController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
 
   Future<bool> newOrder(
       DocumentReference userDoc,
@@ -21,6 +30,7 @@ class OrderController extends GetxController {
       List<String> products = cartItems.map((e) => e.productReference).toList();
 
       if (_isFieldsEmpty(customerName, customerDoc, customerPhone, address)) {
+        print('!FIELDS --> TRUE');
         Get.snackbar(
           'No se pudo generar la orden',
           'Por favor, completar todos los campos.',
@@ -34,6 +44,7 @@ class OrderController extends GetxController {
       }
 
       if (!_isAmountValid(amount)) {
+        print('!AMOUNT --> TRUE');
         Get.snackbar(
           'No se pudo generar la orden',
           'Considere un monto entre S/ 25 y S/ 125.',
@@ -49,9 +60,33 @@ class OrderController extends GetxController {
       var activeOrder = await getActiveOrder(userDoc);
 
       if (activeOrder != null) {
+        print('!ACTIVE --> TRUE');
         Get.snackbar(
           'No se pudo generar la orden',
           'Al parecer ya has realizado un pedido.',
+          icon: Icon(Icons.error_outline),
+          snackPosition: SnackPosition.BOTTOM,
+          duration: Duration(seconds: 10),
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+        return false;
+      }
+
+      var res = await doCheckout(
+        cardNumber: cardController.text,
+        expirationMonth: int.parse(expirationMonthController.text),
+        expirationYear: int.parse(expirationYearController.text),
+        cvv: cvvController.text,
+        email: emailController.text,
+      );
+
+      print('CARD --> $res');
+
+      if (res) {
+        Get.snackbar(
+          'No se pudo generar la orden',
+          'Algo salió mal con el pago.',
           icon: Icon(Icons.error_outline),
           snackPosition: SnackPosition.BOTTOM,
           duration: Duration(seconds: 10),
@@ -117,29 +152,110 @@ class OrderController extends GetxController {
     }
   }
 
-  @visibleForTesting
-  Future<List<CartItemModel>> getCartItems(DocumentReference userDoc) async {
-    QuerySnapshot cart = await userDoc.collection('cart').get();
-    return cart.docs.map((e) => CartItemModel.fromMap(e)).toList();
-  }
+  Future<bool> doCheckout({
+    @required String cardNumber,
+    @required int expirationMonth,
+    @required int expirationYear,
+    @required String cvv,
+    @required String email,
+  }) async {
+    CCard card = CCard(
+      cardNumber: cardNumber,
+      expirationMonth: expirationMonth,
+      expirationYear: expirationYear,
+      cvv: cvv,
+      email: email,
+    );
 
-  bool _isAmountValid(num amount) {
-    return amount >= 25 && amount <= 125;
-  }
+    if (card.isCardNumberValid()) {
+      Get.snackbar(
+        'No se pudo generar la orden',
+        'Por favor, ingrese una tarjeta válida.',
+        icon: Icon(Icons.error_outline),
+        snackPosition: SnackPosition.BOTTOM,
+        duration: Duration(seconds: 10),
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+      return false;
+    }
+    if (card.isExpirationDateValid()) {
+      Get.snackbar(
+        'No se pudo generar la orden',
+        'Por favor, ingrese un año de expiración válido.',
+        icon: Icon(Icons.error_outline),
+        snackPosition: SnackPosition.BOTTOM,
+        duration: Duration(seconds: 10),
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+      return false;
+    }
+    if (card.isCcvValid()) {
+      Get.snackbar(
+        'No se pudo generar la orden',
+        'Por favor, ingrese un CVV válido.',
+        icon: Icon(Icons.error_outline),
+        snackPosition: SnackPosition.BOTTOM,
+        duration: Duration(seconds: 10),
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+      return false;
+    }
+    if (card.isEmailValid()) {
+      Get.snackbar(
+        'No se pudo generar la orden',
+        'Por favor, ingrese un dirección de correo electrónico válida.',
+        icon: Icon(Icons.error_outline),
+        snackPosition: SnackPosition.BOTTOM,
+        duration: Duration(seconds: 10),
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+      return false;
+    }
 
-  bool _isFieldsEmpty(String customerName, String customerDoc,
-      String customerPhone, String address) {
-    return customerName.length == 0 ||
-        customerDoc.length == 0 ||
-        customerPhone.length == 0 ||
-        address.length == 0;
+    try {
+      CToken token = await createToken(
+        card: card,
+        apiKey: 'pk_test_a07317064a25a4da',
+      );
+      print('TOKEN --> $token');
+      return true;
+    } on CulqiBadRequestException catch (ex) {
+      print('ERROR --> ${ex.cause}');
+      return false;
+    } on CulqiUnknownException catch (ex) {
+      //codigo de error del servidor
+      print('ERROR --> ${ex.cause}');
+      return false;
+    }
   }
+}
 
-  bool _isPriceValid(num price) {
-    return price >= 1;
-  }
+@visibleForTesting
+Future<List<CartItemModel>> getCartItems(DocumentReference userDoc) async {
+  QuerySnapshot cart = await userDoc.collection('cart').get();
+  return cart.docs.map((e) => CartItemModel.fromMap(e)).toList();
+}
 
-  bool _isQuantityValid(num quantity) {
-    return quantity >= 1 && quantity <= 4;
-  }
+bool _isAmountValid(num amount) {
+  return amount >= 25 && amount <= 125;
+}
+
+bool _isFieldsEmpty(String customerName, String customerDoc,
+    String customerPhone, String address) {
+  return customerName.length == 0 ||
+      customerDoc.length == 0 ||
+      customerPhone.length == 0 ||
+      address.length == 0;
+}
+
+bool _isPriceValid(num price) {
+  return price >= 1;
+}
+
+bool _isQuantityValid(num quantity) {
+  return quantity >= 1 && quantity <= 4;
 }

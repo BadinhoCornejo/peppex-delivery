@@ -24,10 +24,11 @@ class MapPage extends StatelessWidget {
           'Mi pedido',
         ),
         leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios),
-            onPressed: () {
-              Get.off(Home());
-            }),
+          icon: Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            Get.off(Home());
+          },
+        ),
       ),
       body: SafeArea(
         child: FutureBuilder<OrderModel>(
